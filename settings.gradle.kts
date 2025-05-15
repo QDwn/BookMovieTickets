@@ -19,6 +19,11 @@ dependencyResolutionManagement {
     }
 }
 
+
 rootProject.name = "BookMovieTicketsADRS"
 include(":app")
  
+
+rootProject.name = "BMTADR"
+include(":app")
+

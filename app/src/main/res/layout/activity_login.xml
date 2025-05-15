@@ -11,13 +11,18 @@
         android:id="@+id/textView6"
         android:layout_width="166dp"
         android:layout_height="26dp"
+<<<<<<< HEAD
         android:layout_marginBottom="144dp"
+=======
+        android:layout_marginBottom="72dp"
+>>>>>>> 03aa362 (BookMVTK)
         android:text="Or continue with"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/button3"
         app:layout_constraintEnd_toEndOf="parent"
+<<<<<<< HEAD
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,6 +30,29 @@
 
     <EditText
         android:id="@+id/editTextPassword"
+=======
+        app:layout_constraintHorizontal_bias="0.472"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/login_pw"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
+        android:hint="Password:"
+        android:inputType="textPassword"
+        android:textColor="@android:color/white"
+        android:textColorHint="#CCCCCC"
+        app:layout_constraintBottom_toTopOf="@+id/buttonLogin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.975" />
+
+    <EditText
+        android:id="@+id/login_phone"
+>>>>>>> 03aa362 (BookMVTK)
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="28dp"
@@ -37,7 +65,11 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+<<<<<<< HEAD
         app:layout_constraintVertical_bias="0.975" />
+=======
+        app:layout_constraintVertical_bias="0.753" />
+>>>>>>> 03aa362 (BookMVTK)
 
     <Button
         android:id="@+id/buttonLogin"
@@ -48,15 +80,25 @@
         android:text="Login"
         app:layout_constraintBottom_toTopOf="@+id/textView6"
         app:layout_constraintEnd_toEndOf="parent"
+<<<<<<< HEAD
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.994" />
+=======
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+>>>>>>> 03aa362 (BookMVTK)
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="155dp"
         android:layout_height="46dp"
+<<<<<<< HEAD
         android:layout_marginBottom="200dp"
+=======
+>>>>>>> 03aa362 (BookMVTK)
         android:text="Sign up"
         android:textAlignment="center"
         android:textColor="@color/white"
@@ -64,8 +106,12 @@
         app:layout_constraintBottom_toTopOf="@+id/editTextPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+<<<<<<< HEAD
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
+=======
+        app:layout_constraintTop_toTopOf="parent" />
+>>>>>>> 03aa362 (BookMVTK)
 
     <Button
         android:id="@+id/button3"
@@ -73,7 +119,11 @@
         android:layout_height="54dp"
         android:layout_marginBottom="32dp"
         android:background="@drawable/login_with"
+<<<<<<< HEAD
         android:text="Facebook"
+=======
+        android:text="Sign up with Facebook"
+>>>>>>> 03aa362 (BookMVTK)
         app:backgroundTint="@color/gray"
         app:layout_constraintBottom_toTopOf="@+id/button4"
         app:layout_constraintEnd_toEndOf="parent"
@@ -86,7 +136,11 @@
         android:layout_width="342dp"
         android:layout_height="54dp"
         android:background="@drawable/login_with"
+<<<<<<< HEAD
         android:text="Google"
+=======
+        android:text="Sign up with Google"
+>>>>>>> 03aa362 (BookMVTK)
         app:backgroundTint="@color/gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -101,7 +155,11 @@
         android:layout_marginBottom="92dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/button3"
+<<<<<<< HEAD
         app:layout_constraintHorizontal_bias="0.304"
+=======
+        app:layout_constraintHorizontal_bias="0.167"
+>>>>>>> 03aa362 (BookMVTK)
         app:layout_constraintStart_toStartOf="@+id/button3"
         app:srcCompat="@drawable/logofb" />
 
@@ -112,7 +170,11 @@
         android:layout_marginBottom="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/button3"
+<<<<<<< HEAD
         app:layout_constraintHorizontal_bias="0.325"
+=======
+        app:layout_constraintHorizontal_bias="0.177"
+>>>>>>> 03aa362 (BookMVTK)
         app:layout_constraintStart_toStartOf="@+id/button3"
         app:srcCompat="@drawable/logogg" />
     />
