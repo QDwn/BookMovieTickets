@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "995996437904",
+    "firebase_url": "https://login1-3acbd-default-rtdb.firebaseio.com",
+    "project_id": "login1-3acbd",
+    "storage_bucket": "login1-3acbd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:995996437904:android:a3b3d053e6ce1cb61c3715",
+        "android_client_info": {
+          "package_name": "com.example.movieee"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACzLadd-tcGAynOai0cKHklF6IgwoUNwg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
