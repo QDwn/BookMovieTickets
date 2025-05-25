@@ -45,8 +45,10 @@ public class SignupActivity extends AppCompatActivity {
                 String email = signupEmail.getText().toString();
                 String password = signupPassword.getText().toString();
 
-                HelperClass helperClass = new HelperClass(phone, email, password);
-                reference.child(phone).setValue(helperClass);
+                String role = email.equals("admin@gmail.com") ? "admin" : "user";
+
+                HelperClass helperClass = new HelperClass(phone, email, password, role);
+                reference.child("user_" + email.replace(".", "_")).setValue(helperClass);
 
                 Toast.makeText(SignupActivity.this, "You have sigup  successfully!!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(SignupActivity.this, LoginActivity.class);

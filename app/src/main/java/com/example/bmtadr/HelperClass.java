@@ -4,6 +4,15 @@ public class HelperClass {
     String phone;
     String email;
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    String role;
     public String getPassword() {
         return password;
     }
@@ -31,10 +40,11 @@ public class HelperClass {
     String password;
 
 
-    public HelperClass(String phone, String email, String password) {
+    public HelperClass(String phone, String email, String password, String role) {
         this.phone = phone;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
 

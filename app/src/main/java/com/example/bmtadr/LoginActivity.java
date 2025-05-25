@@ -24,7 +24,7 @@ import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText loginPhone, loginPassword;
+    EditText loginEmail, loginPassword;
     Button loginButton;
 
 
@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
-        loginPhone = findViewById(R.id.login_phone);
+        loginEmail = findViewById(R.id.login_email);
         loginPassword = findViewById(R.id.login_pw);
         loginButton = findViewById(R.id.buttonLogin);
 
@@ -51,12 +51,12 @@ public class LoginActivity extends AppCompatActivity {
 
     }
     public Boolean validatePhone(){
-        String val = loginPhone.getText().toString();
+        String val = loginEmail.getText().toString();
         if (val.isEmpty()){
-            loginPhone.setError("Phone cannot be empty");
+            loginEmail.setError("Phone cannot be empty");
             return false;
         }else {
-            loginPhone.setError(null);
+            loginEmail.setError(null);
             return true;
         }
     }
@@ -72,28 +72,35 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
     public void checkUser(){
-        String userPhone = loginPhone.getText().toString().trim();
+        String userEmail = loginEmail.getText().toString().trim();
         String userPassword = loginPassword.getText().toString().trim();
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
-        Query checkUserDatabase = reference.orderByChild("phone").equalTo(userPhone);
+        String emailKey = "user_" + userEmail.replace(".", "_");
+        Query checkUserDatabase = reference.orderByChild("email").equalTo(userEmail);
 
-        checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.child(emailKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String passwordFromDB = snapshot.child("password").getValue(String.class);
 
-                if (snapshot.exists()){
-                    loginPhone.setError(null);
-                    String passwordFromDB = snapshot.child(userPhone).child("password").getValue(String.class);
+                    if (userPassword.equals(passwordFromDB)) {
+                        String roleFromDB = snapshot.child("role").getValue(String.class);
 
-                    if (Objects.equals(passwordFromDB, userPassword)){
-                        loginPhone.setError(null);
-                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                        startActivity(intent);
-                    }else {
-                        loginPassword.setError("Sai số điện thoại hoặc mật khẩu");
+                        if ("admin".equals(roleFromDB)) {
+                            startActivity(new Intent(LoginActivity.this, AdminActivity.class));
+                        } else {
+                            startActivity(new Intent(LoginActivity.this, UserActivity.class));
+                        }
+                        finish();
+                    } else {
+                        loginPassword.setError("Sai mật khẩu");
                         loginPassword.requestFocus();
                     }
+                } else {
+                    loginEmail.setError("Email không tồn tại");
+                    loginEmail.requestFocus();
                 }
             }
 
