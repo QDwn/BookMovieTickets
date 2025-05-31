@@ -9,11 +9,11 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <!-- Nút quay lại -->
         <ImageButton
-            android:id="@+id/btn_back"
+            android:id="@+id/back"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -21,17 +21,19 @@
             android:contentDescription="Quay lại" />
 
         <!-- Poster phim -->
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/movie_poster_detail"
+        <WebView
+            android:id="@+id/trailer_video"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="200dp"
             android:layout_marginTop="16dp"
-            android:scaleType="centerCrop"
-            android:contentDescription="Ảnh poster phim" />
+            android:layout_marginBottom="12dp"
+            android:background="#000" />
+
+
 
         <!-- Tiêu đề phim -->
         <TextView
-            android:id="@+id/movie_title_detail"
+            android:id="@+id/title_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="22sp"
@@ -42,7 +44,7 @@
 
         <!-- Mô tả phim -->
         <TextView
-            android:id="@+id/movie_description"
+            android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -50,9 +52,18 @@
             android:textColor="#333333"
             android:text="Mô tả phim" />
 
-        <!-- Thời lượng phim -->
+        <!-- Ngày phát hành -->
         <TextView
-            android:id="@+id/movie_duration"
+            android:id="@+id/release_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:text="Ngày chiếu:" />
+        <!-- thời lượng phim -->
+        <TextView
+            android:id="@+id/thoiluong"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -60,19 +71,39 @@
             android:textColor="#666666"
             android:text="Thời lượng:" />
 
-        <!-- Ngày phát hành -->
+        <!-- Đạo diễn -->
         <TextView
-            android:id="@+id/movie_release_date"
+            android:id="@+id/director"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:textSize="14sp"
             android:textColor="#666666"
-            android:text="Ngày chiếu:" />
+            android:text="Đạo diễn:" />
+
+        <!-- Diễn viên -->
+        <TextView
+            android:id="@+id/cast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:text="Diễn viên:" />
+
+        <!-- Đánh giá -->
+        <TextView
+            android:id="@+id/rating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:text="Đánh giá:" />
 
         <!-- Nút đặt vé -->
         <Button
-            android:id="@+id/btn_book_ticket"
+            android:id="@+id/book_ticket"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"

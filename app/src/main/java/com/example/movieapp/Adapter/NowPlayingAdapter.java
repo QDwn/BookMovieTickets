@@ -35,12 +35,10 @@ public class NowPlayingAdapter extends RecyclerView.Adapter<NowPlayingAdapter.No
     @Override
     public void onBindViewHolder(@NonNull NowPlayingViewHolder holder, int position) {
         Movie movie = movies.get(position);
-
         Glide.with(context)
-                .load(movie.getImageUrl()) // từ URL
+                .load(movie.getImageResId()) // lấy ảnh từ máy
                 .placeholder(R.drawable.placeholder_poster)
                 .into(holder.moviePoster);
-
         holder.moviePoster.setOnClickListener(v -> {
             Intent intent = new Intent(context, ChitietMovie_Activity.class);
             intent.putExtra("movieId", movie.getMovieId()); // truyền ID

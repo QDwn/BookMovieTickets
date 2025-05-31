@@ -15,11 +15,13 @@
 
     <TextView
         android:id="@+id/movie_title"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
-        android:maxWidth="150dp"
-        android:textColor="@color/white"
-        android:textSize="16sp" />
+        android:gravity="center"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:text="Tên phim"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"/>
 </LinearLayout>
