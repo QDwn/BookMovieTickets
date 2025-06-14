@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity2"
+    android:background="@color/black"
+    >
+    <!-- Thêm Notification Panel ở đây -->
+    <RelativeLayout
+        android:id="@+id/notification_panel"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:elevation="10dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Nội dung panel thông báo -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/red"
+            android:gravity="center"
+            android:text="THÔNG BÁO"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30dp"
+            android:layout_marginTop="200dp"
+            android:textAlignment="center"
+            android:text="BẠN CHƯA CÓ THÔNG BÁO NÀO" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="50dp"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:id="@+id/notification_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Các thông báo sẽ được thêm vào đây -->
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-67dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Thanh Toolbar tùy chỉnh -->
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:elevation="4dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <!-- Logo và tên app -->
+                    <LinearLayout
+                        android:id="@+id/logo_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="12dp">
+
+                        <ImageView
+                            android:id="@+id/app_logo"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/movie" />
+
+                        <TextView
+                            android:id="@+id/app_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="Movie App"
+                            android:textColor="@color/white"
+                            android:textSize="25dp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <!-- Nút chuông -->
+                    <ImageButton
+                        android:id="@+id/bell_icon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="16dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/notifications"
+                        android:contentDescription="Thông báo" />
+                </RelativeLayout>
+            </androidx.appcompat.widget.Toolbar>
+
+            <EditText
+                android:id="@+id/editTextText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="16dp"
+                android:background="@drawable/edittext_background"
+                android:drawableEnd="@drawable/search"
+                android:drawablePadding="8dp"
+                android:ems="10"
+                android:hint="Search Movie..."
+                android:inputType="text"
+                android:padding="12dp"
+                android:textColorHint="@color/black"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="About Us"
+                android:textColor="@color/white"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:paddingLeft="10dp"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="250dp">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/now_playing_view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Now Playing"
+                android:textColor="@color/white"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:paddingLeft="10dp"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="300dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/view1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:clipToPadding="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="Service"
+                android:textColor="@color/white"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:paddingLeft="10dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="12dp"
+                android:gravity="center">
+
+                <!-- ITEM 1 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="20dp"
+                    android:gravity="center_horizontal">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/single"
+                        app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Single"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="6dp"/>
+                </LinearLayout>
+
+                <!-- ITEM 2 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="20dp"
+                    android:gravity="center_horizontal">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/sweetbox"
+                        app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sweetbox"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="6dp"/>
+                </LinearLayout>
+
+                <!-- ITEM 3 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="20dp"
+                    android:gravity="center_horizontal">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/imax"
+                        app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="IMAX"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="6dp"/>
+                </LinearLayout>
+
+                <!-- ITEM 4 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="center_horizontal">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/screenx"
+                        app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4DX"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:layout_marginTop="6dp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                >
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:backgroundTint="@color/red">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:weightSum="4">
+
+                <!-- Home -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:onClick="onMenuButtonClick">
+
+                    <ImageButton
+                        android:id="@+id/btn_home"
+                        style="@style/BottomMenuButton"
+                        android:src="@drawable/home"
+                        android:contentDescription="Home"
+                        android:clickable="true"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Home"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:layout_marginTop="2dp"/>
+                </LinearLayout>
+
+                <!-- Ticket -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:onClick="onMenuButtonClick">
+
+                    <ImageButton
+                        android:id="@+id/btn_ticket"
+                        style="@style/BottomMenuButton"
+                        android:src="@drawable/ticket"
+                        android:contentDescription="Ticket"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ticket"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:layout_marginTop="2dp"/>
+                </LinearLayout>
+
+                <!-- Movie -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:onClick="onMenuButtonClick">
+
+                    <ImageButton
+                        android:id="@+id/btn_movie"
+                        style="@style/BottomMenuButton"
+                        android:src="@drawable/movie"
+                        android:contentDescription="Movie"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Movie"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:layout_marginTop="2dp"/>
+                </LinearLayout>
+
+                <!-- Account -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:onClick="onMenuButtonClick">
+
+                    <ImageButton
+                        android:id="@+id/btn_account"
+                        style="@style/BottomMenuButton"
+                        android:src="@drawable/profile"
+                        android:contentDescription="Account"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Account"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:layout_marginTop="2dp"/>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.bottomappbar.BottomAppBar>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,38 @@
+<!-- res/drawable/placeholder_poster.xml -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="150dp"
+    android:height="225dp"
+    android:viewportWidth="150"
+    android:viewportHeight="225">
+
+    <!-- Nền màu xám nhạt -->
+    <path
+        android:fillColor="#F5F5F5"
+        android:pathData="M0,0h150v225h-150z"/>
+
+    <!-- Icon máy quay phim (màu xám đậm) -->
+    <group android:translateX="45" android:translateY="60">
+        <path
+            android:fillColor="#E0E0E0"
+            android:pathData="M30,0h40v20h-40z"/>
+        <path
+            android:fillColor="#E0E0E0"
+            android:pathData="M10,20h80v85h-80z"/>
+        <path
+            android:fillColor="#BDBDBD"
+            android:pathData="M25,40l30,20l-30,20z"/>
+    </group>
+
+    <!-- Chữ "Loading..." -->
+    <group android:translateX="30" android:translateY="180">
+        <path
+            android:fillColor="#9E9E9E"
+            android:pathData="M0,0h10v5h-10z"/>
+        <path
+            android:fillColor="#9E9E9E"
+            android:pathData="M20,0h10v5h-10z"/>
+        <path
+            android:fillColor="#9E9E9E"
+            android:pathData="M40,0h10v5h-10z"/>
+    </group>
+</vector>

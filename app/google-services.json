@@ -1,14 +1,33 @@
 {
   "project_info": {
-    "project_number": "995996437904",
-    "firebase_url": "https://login1-3acbd-default-rtdb.firebaseio.com",
-    "project_id": "login1-3acbd",
-    "storage_bucket": "login1-3acbd.firebasestorage.app"
+    "project_number": "491566217477",
+    "firebase_url": "https://movieapptest-40a67-default-rtdb.firebaseio.com",
+    "project_id": "movieapptest-40a67",
+    "storage_bucket": "movieapptest-40a67.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:995996437904:android:a3b3d053e6ce1cb61c3715",
+        "mobilesdk_app_id": "1:491566217477:android:0ed5f12086feaff9229f6c",
+        "android_client_info": {
+          "package_name": "com.example.movieapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVlx2iMLyKwEmYdSuc2laA6gll0pVkHzc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491566217477:android:1e5b136a04b3a2f1229f6c",
         "android_client_info": {
           "package_name": "com.example.movieee"
         }
@@ -16,7 +35,26 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyACzLadd-tcGAynOai0cKHklF6IgwoUNwg"
+          "current_key": "AIzaSyBVlx2iMLyKwEmYdSuc2laA6gll0pVkHzc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491566217477:android:5a73b111c3c0bd6a229f6c",
+        "android_client_info": {
+          "package_name": "om.example.movie"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVlx2iMLyKwEmYdSuc2laA6gll0pVkHzc"
         }
       ],
       "services": {
