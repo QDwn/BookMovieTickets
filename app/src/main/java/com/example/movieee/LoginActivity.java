@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,79 +22,78 @@ public class LoginActivity extends AppCompatActivity {
 
     EditText loginPhone, loginPassWord;
     Button loginButton;
-    TextView signupRedirectText;
-
+    TextView signupRedirectText, forgotPasswordText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
         loginPhone = findViewById(R.id.loginphone);
         loginPassWord = findViewById(R.id.loginpw);
-        signupRedirectText = findViewById(R.id.textsignup);
         loginButton = findViewById(R.id.buttonLogin);
+        signupRedirectText = findViewById(R.id.textsignup);
+        forgotPasswordText = findViewById(R.id.textForgotPassword); // ✅ Quên mật khẩu
 
+        // Đăng nhập
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!validateUsername() | !validatePassWord()){
-
-                }else{
+                if (!validateUsername() | !validatePassWord()) {
+                    // Không làm gì cả nếu dữ liệu không hợp lệ
+                } else {
                     checkUser();
                 }
             }
         });
 
+        // Chuyển sang màn hình đăng ký
         signupRedirectText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this,SignupActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        // Gán sự kiện nhấn vào "Sign Up"
-        TextView textViewSignUp = findViewById(R.id.textsignup);
-        textViewSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Chuyển sang màn hình đăng ký
                 Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
                 startActivity(intent);
             }
+        });
 
+        // ✅ Chuyển sang màn hình quên mật khẩu
+        forgotPasswordText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+                startActivity(intent);
+            }
         });
     }
-    public Boolean validateUsername(){
+
+    public Boolean validateUsername() {
         String val = loginPhone.getText().toString();
-        if (val.isEmpty()){
+        if (val.isEmpty()) {
             loginPhone.setError("Username cannot be empty");
             return false;
-        }else{
+        } else {
             loginPhone.setError(null);
             return true;
         }
     }
 
-    public Boolean validatePassWord(){
+    public Boolean validatePassWord() {
         String val = loginPassWord.getText().toString();
-        if (val.isEmpty()){
+        if (val.isEmpty()) {
             loginPassWord.setError("Password cannot be empty");
             return false;
-        }else{
+        } else {
             loginPassWord.setError(null);
             return true;
         }
     }
 
-    public void checkUser(){
+    public void checkUser() {
         String userUsername = loginPhone.getText().toString().trim();
         String userPassword = loginPassWord.getText().toString().trim();
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("user");
-        Query checkUserDatabase = reference.orderByChild("username").equalTo(userUsername);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
+        Query checkUserDatabase = reference.orderByChild("phone").equalTo(userUsername);
 
         checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -118,10 +118,9 @@ public class LoginActivity extends AppCompatActivity {
 
             }
 
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Toast.makeText(LoginActivity.this, "Database error", Toast.LENGTH_SHORT).show();
             }
         });
     }

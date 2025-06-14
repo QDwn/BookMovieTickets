@@ -45,6 +45,7 @@
             android:textColor="@color/white"
             android:textColorHint="#C3BDBD" />
 
+
         <EditText
             android:id="@+id/loginpw"
             android:layout_width="match_parent"
@@ -53,9 +54,10 @@
             android:background="@drawable/edittext_border_red"
             android:ems="10"
             android:hint="Password"
-            android:inputType="text"
+            android:inputType="textPassword"
             android:paddingHorizontal="10dp"
-            android:textColorHint="#C3BDBD" />
+            android:textColorHint="#C3BDBD"
+            android:textColor="@color/white"/>/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -72,7 +74,7 @@
                 android:textSize="18dp" />
 
             <TextView
-                android:id="@+id/textView7"
+                android:id="@+id/textForgotPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
@@ -88,7 +90,7 @@
         android:id="@+id/buttonLogin"
         android:layout_width="325dp"
         android:layout_height="55dp"
-        android:layout_marginTop="332dp"
+        android:layout_marginTop="328dp"
         android:backgroundTint="@android:color/holo_red_dark"
         android:text="Login"
         android:textStyle="bold"
