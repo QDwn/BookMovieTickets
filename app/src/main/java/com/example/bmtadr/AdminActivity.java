@@ -1,6 +1,9 @@
 package com.example.bmtadr;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,5 +16,13 @@ public class AdminActivity extends AppCompatActivity {
 
         TextView textView = findViewById(R.id.admin_text);
         textView.setText("Welcome, Admin!");
+        Button btnManageUsers = findViewById(R.id.btnManageUsers);
+        btnManageUsers.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdminActivity.this, UserManagementActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

@@ -1,3 +1,4 @@
+// app/src/main/java/com/example/bmtadr/LoginActivity.java
 package com.example.bmtadr;
 
 import android.content.Intent;
@@ -5,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast; // Import Toast
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -27,7 +29,6 @@ public class LoginActivity extends AppCompatActivity {
     EditText loginEmail, loginPassword;
     Button loginButton;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,21 +42,23 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!validatePhone() | !validatePassword()){
-
-                }else {
+                // Thay đổi từ | thành ||
+                if (!validatePhone() || !validatePassword()){
+                    // Hiển thị thông báo nếu xác thực thất bại
+                    Toast.makeText(LoginActivity.this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                } else {
                     checkUser();
                 }
             }
         });
-
     }
+
     public Boolean validatePhone(){
         String val = loginEmail.getText().toString();
         if (val.isEmpty()){
             loginEmail.setError("Phone cannot be empty");
             return false;
-        }else {
+        } else {
             loginEmail.setError(null);
             return true;
         }
@@ -66,18 +69,21 @@ public class LoginActivity extends AppCompatActivity {
         if (val.isEmpty()){
             loginPassword.setError("Password cannot be empty");
             return false;
-        }else {
+        } else {
             loginPassword.setError(null);
             return true;
         }
     }
+
     public void checkUser(){
         String userEmail = loginEmail.getText().toString().trim();
         String userPassword = loginPassword.getText().toString().trim();
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
+        // Quan trọng: đảm bảo emailKey này khớp với cách bạn lưu người dùng khi đăng ký.
+        // Nếu loginEmail thực sự là số điện thoại, bạn cần thay đổi logic ở đây.
+        // Hiện tại, code này vẫn đang mong đợi email.
         String emailKey = "user_" + userEmail.replace(".", "_");
-        Query checkUserDatabase = reference.orderByChild("email").equalTo(userEmail);
 
         reference.child(emailKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -99,6 +105,7 @@ public class LoginActivity extends AppCompatActivity {
                         loginPassword.requestFocus();
                     }
                 } else {
+                    // Log ra lỗi hoặc hiển thị Toast chi tiết hơn
                     loginEmail.setError("Email không tồn tại");
                     loginEmail.requestFocus();
                 }
@@ -106,7 +113,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                // Xử lý lỗi từ Firebase (ví dụ: mất kết nối, quyền truy cập)
+                Toast.makeText(LoginActivity.this, "Lỗi Firebase: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
