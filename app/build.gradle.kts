@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation("com.google.android.gms:play-services-auth:21.2.0") // Hoặc phiên bản mới nhất
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

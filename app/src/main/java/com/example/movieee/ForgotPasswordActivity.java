@@ -2,8 +2,10 @@ package com.example.movieee;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View; // Import View
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView; // Import ImageView
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -25,6 +27,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     private EditText editTextPhone;
     private Button buttonSendOtp;
+    private ImageView backArrow; // Thêm khai báo ImageView
     private FirebaseAuth mAuth;
 
     @Override
@@ -35,6 +38,15 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         editTextPhone = findViewById(R.id.editTextPhone);
         buttonSendOtp = findViewById(R.id.buttonSendOtp);
+        backArrow = findViewById(R.id.backArrow); // Ánh xạ ID cho nút back
+
+        // Xử lý sự kiện click cho nút back
+        backArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Hoặc Intent để quay về LoginActivity
+            }
+        });
 
         buttonSendOtp.setOnClickListener(v -> {
             String phone = editTextPhone.getText().toString().trim();
@@ -43,9 +55,18 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 return;
             }
 
+            // Kiểm tra định dạng số điện thoại để loại bỏ số 0 ở đầu nếu có
+            // và thêm mã quốc gia. Ví dụ: từ "0912345678" thành "+84912345678"
+            String fullPhoneNumber;
+            if (phone.startsWith("0")) {
+                fullPhoneNumber = "+84" + phone.substring(1);
+            } else {
+                fullPhoneNumber = "+84" + phone; // Nếu đã nhập không có 0 ở đầu
+            }
+
             PhoneAuthOptions options =
                     PhoneAuthOptions.newBuilder(mAuth)
-                            .setPhoneNumber("+84" + phone.substring(1)) // Replace with valid phone
+                            .setPhoneNumber(fullPhoneNumber) // Sử dụng số điện thoại đã chuẩn hóa
                             .setTimeout(60L, TimeUnit.SECONDS)
                             .setActivity(this)
                             .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -65,7 +86,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                                     // Chuyển sang màn hình nhập OTP
                                     Intent intent = new Intent(ForgotPasswordActivity.this, VerifyOtpActivity.class);
                                     intent.putExtra("verificationId", verificationId);
-                                    intent.putExtra("phone", phone);
+                                    intent.putExtra("phone", phone); // Truyền số điện thoại gốc (có thể có 0) để dùng cho các màn hình sau nếu cần hiển thị
                                     startActivity(intent);
                                 }
                             })

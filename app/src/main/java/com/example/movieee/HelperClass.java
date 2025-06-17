@@ -1,27 +1,32 @@
 package com.example.movieee;
 
 public class HelperClass {
-    String firstname;
-    String lastname;
+    String username;
     String phone;
     String email;
     String password;
 
-    public String getFirstname() {
-        return firstname;
+    public HelperClass() {
+        // Constructor mặc định bắt buộc cho Firebase
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public HelperClass(String username, String phone, String email, String password) {
+        this.username = username;
+        this.phone = phone;
+        this.email = email;
+        this.password = password;
     }
 
-    public String getLastname() {
-        return lastname;
+    // Getter và Setter
+
+    public String getUsername() {
+        return username;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setUsername(String username) {
+        this.username = username;
     }
+
     public String getPhone() {
         return phone;
     }
@@ -44,20 +49,5 @@ public class HelperClass {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-
-
-    public HelperClass(String firstname, String lastname,  String phone, String email,String password) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.phone = phone;
-        this.email = email;
-        this.password = password;
-    }
-
-
-    public HelperClass() {
-
     }
 }

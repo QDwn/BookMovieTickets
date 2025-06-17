@@ -85,7 +85,7 @@
         android:id="@+id/button2"
         android:layout_width="328dp"
         android:layout_height="55dp"
-        android:background="@drawable/button_border_red"
+        android:background="@drawable/edittext_border_red"
         android:text="Sign Up"
         app:backgroundTint="@color/red"
         app:layout_constraintBottom_toBottomOf="parent"

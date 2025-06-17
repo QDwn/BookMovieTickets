@@ -9,11 +9,10 @@
 
     <TextView
         android:id="@+id/textLogin"
-        android:layout_width="155dp"
-        android:layout_height="46dp"
+        android:layout_width="144dp"
+        android:layout_height="52dp"
         android:layout_marginTop="64dp"
-        android:text="Login"
-        android:textAlignment="center"
+        android:text="Sign In"
         android:textColor="@color/white"
         android:textSize="30dp"
         android:textStyle="bold"
@@ -46,18 +45,37 @@
             android:textColorHint="#C3BDBD" />
 
 
-        <EditText
-            android:id="@+id/loginpw"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:layout_marginTop="18dp"
-            android:background="@drawable/edittext_border_red"
-            android:ems="10"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:paddingHorizontal="10dp"
-            android:textColorHint="#C3BDBD"
-            android:textColor="@color/white"/>/>
+            android:layout_marginTop="18dp">
+
+            <EditText
+                android:id="@+id/loginpw"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/edittext_border_red"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:paddingStart="10dp"
+                android:paddingEnd="45dp"
+                android:textColor="@color/white"
+                android:textColorHint="#C3BDBD" />
+
+            <ImageView
+                android:id="@+id/eye_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_eye_off"
+                android:contentDescription="Show/Hide Password"
+                android:clickable="true"
+                android:focusable="true" />
+        </RelativeLayout>
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -116,7 +134,7 @@
             android:id="@+id/textView6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Or Sign in with"
+            android:text="Or continue with"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="23dp" />

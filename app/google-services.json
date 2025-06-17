@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "995996437904",
+    "firebase_url": "https://login1-3acbd-default-rtdb.firebaseio.com",
+    "project_id": "login1-3acbd",
+    "storage_bucket": "login1-3acbd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:995996437904:android:a3b3d053e6ce1cb61c3715",
+        "android_client_info": {
+          "package_name": "com.example.movieee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "995996437904-rvg19s1nsr2lirbl08avvr3ulu2fg412.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.movieee",
+            "certificate_hash": "a3502677d2559962b4bcbe2fd7ff7a9ab739ce51"
+          }
+        },
+        {
+          "client_id": "995996437904-he82pac3n1epdmt0ht0j0gnhir3jq677.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACzLadd-tcGAynOai0cKHklF6IgwoUNwg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "995996437904-he82pac3n1epdmt0ht0j0gnhir3jq677.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
