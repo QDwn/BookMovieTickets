@@ -1,33 +1,24 @@
 package com.example.movieee;
 
 public class HelperClass {
-    String firstname;
-    String lastname;
     String phone;
     String email;
-    String password;
 
-    public String getFirstname() {
-        return firstname;
+    public String getRole() {
+        return role;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public String getLastname() {
-        return lastname;
+    String role;
+    public String getPassword() {
+        return password;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getEmail() {
@@ -38,26 +29,25 @@ public class HelperClass {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
+    String password;
 
 
-    public HelperClass(String firstname, String lastname,  String phone, String email,String password) {
-        this.firstname = firstname;
-        this.lastname = lastname;
+    public HelperClass(String phone, String email, String password, String role) {
         this.phone = phone;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
 
     public HelperClass() {
-
     }
 }

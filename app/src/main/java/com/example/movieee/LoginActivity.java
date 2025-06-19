@@ -5,11 +5,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.Toast; // Import Toast
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,109 +21,99 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Objects;
+
 public class LoginActivity extends AppCompatActivity {
 
-    EditText loginPhone, loginPassWord;
+    EditText loginEmail, loginPassword;
     Button loginButton;
-    TextView signupRedirectText, forgotPasswordText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
-        loginPhone = findViewById(R.id.loginphone);
-        loginPassWord = findViewById(R.id.loginpw);
+        loginEmail = findViewById(R.id.login_email);
+        loginPassword = findViewById(R.id.login_pw);
         loginButton = findViewById(R.id.buttonLogin);
-        signupRedirectText = findViewById(R.id.textsignup);
-        forgotPasswordText = findViewById(R.id.textForgotPassword); // ✅ Quên mật khẩu
 
-        // Đăng nhập
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                if (!validateUsername() | !validatePassWord()) {
-                    // Không làm gì cả nếu dữ liệu không hợp lệ
+            public void onClick(View view) {
+                // Thay đổi từ | thành ||
+                if (!validatePhone() || !validatePassword()){
+                    // Hiển thị thông báo nếu xác thực thất bại
+                    Toast.makeText(LoginActivity.this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
                 } else {
                     checkUser();
                 }
             }
         });
-
-        // Chuyển sang màn hình đăng ký
-        signupRedirectText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        // ✅ Chuyển sang màn hình quên mật khẩu
-        forgotPasswordText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
-    public Boolean validateUsername() {
-        String val = loginPhone.getText().toString();
-        if (val.isEmpty()) {
-            loginPhone.setError("Username cannot be empty");
+    public Boolean validatePhone(){
+        String val = loginEmail.getText().toString();
+        if (val.isEmpty()){
+            loginEmail.setError("Phone cannot be empty");
             return false;
         } else {
-            loginPhone.setError(null);
+            loginEmail.setError(null);
             return true;
         }
     }
 
-    public Boolean validatePassWord() {
-        String val = loginPassWord.getText().toString();
-        if (val.isEmpty()) {
-            loginPassWord.setError("Password cannot be empty");
+    public Boolean validatePassword(){
+        String val = loginPassword.getText().toString();
+        if (val.isEmpty()){
+            loginPassword.setError("Password cannot be empty");
             return false;
         } else {
-            loginPassWord.setError(null);
+            loginPassword.setError(null);
             return true;
         }
     }
 
-    public void checkUser() {
-        String userUsername = loginPhone.getText().toString().trim();
-        String userPassword = loginPassWord.getText().toString().trim();
+    public void checkUser(){
+        String userEmail = loginEmail.getText().toString().trim();
+        String userPassword = loginPassword.getText().toString().trim();
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
-        Query checkUserDatabase = reference.orderByChild("phone").equalTo(userUsername);
+        // Quan trọng: đảm bảo emailKey này khớp với cách bạn lưu người dùng khi đăng ký.
+        // Nếu loginEmail thực sự là số điện thoại, bạn cần thay đổi logic ở đây.
+        // Hiện tại, code này vẫn đang mong đợi email.
+        String emailKey = "user_" + userEmail.replace(".", "_");
 
-        checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.child(emailKey).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                 if (snapshot.exists()) {
-                    loginPhone.setError(null);
-                    String passwordFromDB = snapshot.child(userUsername).child("password").getValue(String.class);
+                    String passwordFromDB = snapshot.child("password").getValue(String.class);
 
-                    if (passwordFromDB != null && passwordFromDB.equals(userPassword)) {
-                        loginPassWord.setError(null);
-                        Intent intent = new Intent(LoginActivity.this, MainActivity2.class);
-                        startActivity(intent);
+                    if (userPassword.equals(passwordFromDB)) {
+                        String roleFromDB = snapshot.child("role").getValue(String.class);
+
+                        if ("admin".equals(roleFromDB)) {
+                            startActivity(new Intent(LoginActivity.this, AdminActivity.class));
+                        } else {
+                            startActivity(new Intent(LoginActivity.this, UserActivity.class));
+                        }
+                        finish();
                     } else {
-                        loginPassWord.setError("Invalid credentials");
-                        loginPassWord.requestFocus();
+                        loginPassword.setError("Sai mật khẩu");
+                        loginPassword.requestFocus();
                     }
                 } else {
-                    loginPhone.setError("User does not exist");
-                    loginPhone.requestFocus();
+                    // Log ra lỗi hoặc hiển thị Toast chi tiết hơn
+                    loginEmail.setError("Email không tồn tại");
+                    loginEmail.requestFocus();
                 }
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(LoginActivity.this, "Database error", Toast.LENGTH_SHORT).show();
+                // Xử lý lỗi từ Firebase (ví dụ: mất kết nối, quyền truy cập)
+                Toast.makeText(LoginActivity.this, "Lỗi Firebase: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

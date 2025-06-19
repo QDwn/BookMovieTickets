@@ -2,24 +2,28 @@ package com.example.movieee;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.firebase.Firebase;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import com.example.movieee.HelperClass;
+import com.example.movieee.LoginActivity;
+import com.example.movieee.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class SignupActivity extends AppCompatActivity {
 
-    EditText signupFirstName,signupLastName,signupPhone,signupEmail,signupPassWord;
-    TextView loginRedirectText;
-    Button signupbutton;
+    EditText signupPhone, signupEmail, signupPassword;
+    Button signupButton;
     FirebaseDatabase database;
     DatabaseReference reference;
 
@@ -29,48 +33,31 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        signupFirstName=findViewById(R.id.textFN);
-        signupLastName=findViewById(R.id.textLN);
-        signupPhone=findViewById(R.id.textphone);
-        signupEmail=findViewById(R.id.textemail);
-        signupPassWord=findViewById(R.id.textpw);
-        signupbutton=findViewById(R.id.buttonsignup);
-        loginRedirectText = findViewById(R.id.textsignin);
+        signupPhone = findViewById(R.id.signup_phone);
+        signupEmail = findViewById(R.id.signup_email);
+        signupPassword = findViewById(R.id.signup_pw);
+        signupButton = findViewById(R.id.signup_button);
 
-        signupbutton.setOnClickListener(new View.OnClickListener() {
+        signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 database = FirebaseDatabase.getInstance();
                 reference = database.getReference("users");
 
-                String firstname = signupFirstName.getText().toString();
-                String lastname = signupLastName.getText().toString();
                 String phone = signupPhone.getText().toString();
                 String email = signupEmail.getText().toString();
-                String password = signupPassWord.getText().toString();
+                String password = signupPassword.getText().toString();
 
-                HelperClass helperClass = new HelperClass(firstname,lastname,phone,email,password);
-                reference.child(phone).setValue(helperClass);
+                String role = email.equals("admin@gmail.com") ? "admin" : "user";
 
-                Toast.makeText(SignupActivity.this, "dang ky thanh cong", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
+                HelperClass helperClass = new HelperClass(phone, email, password, role);
+                reference.child("user_" + email.replace(".", "_")).setValue(helperClass);
 
-        });
-        loginRedirectText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                Toast.makeText(SignupActivity.this, "You have sigup  successfully!!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
-
-
-        // Tìm CheckBox theo ID
-        CheckBox checkBox = findViewById(R.id.checkboxsignup);
-        // Đặt nội dung text với từ "privacy" màu đỏ (#FF0000)
-        checkBox.setText(Html.fromHtml("I agree with <font color='#FF0000'>privacy</font> and <font color='#FF0000'>policy</font>"));
 
 
     }

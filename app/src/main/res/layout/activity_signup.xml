@@ -44,7 +44,7 @@
 
             <EditText
 
-                android:id="@+id/textFN"
+                android:id="@+id/signup_fistname"
                 android:layout_width="0dp"
                 android:layout_height="42dp"
                 android:layout_weight="1"
@@ -61,7 +61,7 @@
                 android:layout_height="10dp" />
 
             <EditText
-                android:id="@+id/textLN"
+                android:id="@+id/signup_lastname"
                 android:layout_width="0dp"
                 android:layout_height="42dp"
                 android:layout_weight="1"
@@ -77,7 +77,7 @@
 
 
         <EditText
-            android:id="@+id/textphone"
+            android:id="@+id/signup_phone"
             android:layout_width="match_parent"
             android:layout_height="42dp"
             android:background="@drawable/edittext_border_red"
@@ -90,7 +90,7 @@
 
 
         <EditText
-            android:id="@+id/textemail"
+            android:id="@+id/signup_email"
             android:layout_width="match_parent"
             android:layout_height="42dp"
             android:layout_marginTop="18dp"
@@ -107,7 +107,7 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/textpw"
+                android:id="@+id/signup_pw"
                 android:layout_width="match_parent"
                 android:layout_height="42dp"
                 android:layout_marginTop="18dp"
@@ -123,7 +123,7 @@
 
 
         <CheckBox
-            android:id="@+id/checkboxsignup"
+            android:id="@+id/checkBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -136,7 +136,7 @@
 
     </LinearLayout>
     <Button
-        android:id="@+id/buttonsignup"
+        android:id="@+id/signup_button"
         android:layout_width="261dp"
         android:layout_height="48dp"
         android:background="@drawable/button_border_red"
