@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                         if ("admin".equals(roleFromDB)) {
                             startActivity(new Intent(LoginActivity.this, AdminActivity.class));
                         } else {
-                            startActivity(new Intent(LoginActivity.this, UserActivity.class));
+                            startActivity(new Intent(LoginActivity.this, MainActivity2.class));
                         }
                         finish();
                     } else {
