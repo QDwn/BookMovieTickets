@@ -1,27 +1,34 @@
 package com.example.movieee;
 
 public class HelperClass {
-    String firstname;
-    String lastname;
+    String username; // Đã thêm trường username
     String phone;
     String email;
     String password;
+    String role;
 
-    public String getFirstname() {
-        return firstname;
+
+    public HelperClass() {
+
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+
+    public HelperClass(String username, String phone, String email, String password, String role) {
+        this.username = username;
+        this.phone = phone;
+        this.email = email;
+        this.password = password;
+        this.role = role;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getUsername() {
+        return username;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setUsername(String username) {
+        this.username = username;
     }
+
     public String getPhone() {
         return phone;
     }
@@ -46,18 +53,11 @@ public class HelperClass {
         this.password = password;
     }
 
-
-
-    public HelperClass(String firstname, String lastname,  String phone, String email,String password) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.phone = phone;
-        this.email = email;
-        this.password = password;
+    public String getRole() {
+        return role;
     }
 
-
-    public HelperClass() {
-
+    public void setRole(String role) {
+        this.role = role;
     }
 }

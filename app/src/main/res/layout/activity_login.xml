@@ -34,12 +34,12 @@
 
 
         <EditText
-            android:id="@+id/loginphone"
+            android:id="@+id/login_email"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:background="@drawable/edittext_border_red"
             android:ems="10"
-            android:hint="Phone Number"
+            android:hint="Email"
             android:inputType="text"
             android:paddingHorizontal="10dp"
             android:textColor="@color/white"
@@ -47,7 +47,7 @@
 
 
         <EditText
-            android:id="@+id/loginpw"
+            android:id="@+id/login_pw"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_marginTop="18dp"
@@ -91,7 +91,7 @@
         android:layout_width="325dp"
         android:layout_height="55dp"
         android:layout_marginTop="328dp"
-        android:backgroundTint="@android:color/holo_red_dark"
+        app:backgroundTint="#810C0C"
         android:text="Login"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -170,7 +170,7 @@
                 android:layout_height="39dp"
                 android:layout_marginTop="18dp"
                 android:layout_weight="1"
-                android:text="Don't have an account?"
+                android:text="Don't have an account ?"
                 android:textColor="@color/white"
                 android:textSize="20dp" />
 
