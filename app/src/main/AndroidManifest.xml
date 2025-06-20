@@ -19,8 +19,11 @@
             android:name=".UserManagementActivity"
             android:exported="false" />
         <activity
-            android:name=".UserActivity"
+            android:name=".MovieManagementActivity"
             android:exported="false" />
+        <activity
+        android:name=".UserActivity"
+        android:exported="false" />
         <activity
             android:name=".AdminActivity"
             android:exported="false" />

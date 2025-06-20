@@ -206,28 +206,40 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    // Phương thức checkUser vẫn giữ nguyên cho đăng nhập bằng số điện thoại/mật khẩu
+    // Phương thức checkUser đã được sửa đổi
     public void checkUser() {
-        String userUsername = loginEmail.getText().toString().trim();
+        String userEmail = loginEmail.getText().toString().trim(); // Đổi tên biến để rõ ràng hơn
         String userPassword = loginPassWord.getText().toString().trim();
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
-        Query checkUserDatabase = reference.orderByKey().equalTo(userUsername);
+        // Truy vấn dựa trên trường 'email' bên trong các node con
+        Query checkUserDatabase = reference.orderByChild("email").equalTo(userEmail);
 
         checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     loginEmail.setError(null);
+                    // Duyệt qua các kết quả (thường chỉ có 1 nếu email là duy nhất)
                     for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                        String passwordFromDB = userSnapshot.child("password").getValue(String.class);
+                        HelperClass user = userSnapshot.getValue(HelperClass.class); // Lấy đối tượng HelperClass
+                        if (user != null) {
+                            String passwordFromDB = user.getPassword();
 
-                        if (passwordFromDB != null && passwordFromDB.equals(userPassword)) {
-                            loginPassWord.setError(null);
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                            return;
+                            if (passwordFromDB != null && passwordFromDB.equals(userPassword)) {
+                                loginPassWord.setError(null);
+                                // Kiểm tra vai trò của người dùng
+                                String role = user.getRole();
+                                if (role != null && role.equals("admin")) {
+                                    Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
+                                    startActivity(intent);
+                                } else {
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity2.class); // Chuyển đến MainActivity2 cho người dùng thông thường
+                                    startActivity(intent);
+                                }
+                                finish();
+                                return; // Đã tìm thấy người dùng và xử lý, thoát khỏi vòng lặp
+                            }
                         }
                     }
                     loginPassWord.setError("Invalid credentials");

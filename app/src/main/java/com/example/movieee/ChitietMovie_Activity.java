@@ -55,55 +55,75 @@ public class ChitietMovie_Activity extends AppCompatActivity {
             return;
         }
 
-        // Truy vấn dữ liệu từ Firebase
-        DatabaseReference movieRef = FirebaseDatabase.getInstance()
-                .getReference("chi_tiet_phim")
+        // --- Lấy link ảnh từ danh_sach_phim ---
+        DatabaseReference posterRef = FirebaseDatabase.getInstance()
+                .getReference("danh_sach_phim") // Lấy từ danh_sach_phim
                 .child(movieId);
 
-        movieRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        posterRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    String tenPhim = snapshot.child("ten_phim").getValue(String.class);
-                    String moTa = snapshot.child("mo_ta").getValue(String.class);
-                    String khoiChieu = snapshot.child("khoi_chieu").getValue(String.class);
-                    String thoiluongVal = snapshot.child("thoi_luong").getValue(String.class);
-                    String daoDien = snapshot.child("dao_dien").getValue(String.class);
-                    Double ratingValue = snapshot.child("danh_gia").getValue(Double.class);
-                    String danhGia = (ratingValue != null) ? String.valueOf(ratingValue) : "Chưa đánh giá";
-                    String trailerUrl = snapshot.child("trailer").getValue(String.class);
+            public void onDataChange(@NonNull DataSnapshot posterSnapshot) {
+                String imageUrl = posterSnapshot.child("poster").getValue(String.class); // Lấy URL poster
+                // (Optional) If you want to display the poster here, add an ImageView in layout
+                // and use Glide.with(ChitietMovie_Activity.this).load(imageUrl).into(yourImageView);
 
-                    // Diễn viên dạng list
-                    GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
-                    List<String> castList = snapshot.child("dien_vien").getValue(t);
-                    String dienVien = (castList != null) ? TextUtils.join(", ", castList) : "Chưa rõ";
+                // --- Lấy thông tin chi tiết từ chi_tiet_phim ---
+                DatabaseReference detailRef = FirebaseDatabase.getInstance()
+                        .getReference("chi_tiet_phim") // Lấy từ chi_tiet_phim
+                        .child(movieId);
 
-                    if (tenPhim != null) titleDetail.setText(tenPhim);
-                    if (moTa != null) description.setText(moTa);
-                    if (khoiChieu != null) releaseDate.setText("Ngày chiếu: " + khoiChieu);
-                    if (thoiluongVal != null) thoiluong.setText("Thời lượng: " + thoiluongVal);
-                    if (daoDien != null) director.setText("Đạo diễn: " + daoDien);
-                    cast.setText("Diễn viên: " + dienVien);
-                    rating.setText("Đánh giá: " + danhGia + " ★");
+                detailRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot detailSnapshot) {
+                        if (detailSnapshot.exists()) {
+                            String tenPhim = detailSnapshot.child("ten_phim").getValue(String.class);
+                            String moTa = detailSnapshot.child("mo_ta").getValue(String.class);
+                            String khoiChieu = detailSnapshot.child("khoi_chieu").getValue(String.class);
+                            String thoiluongVal = detailSnapshot.child("thoi_luong").getValue(String.class);
+                            String daoDien = detailSnapshot.child("dao_dien").getValue(String.class);
+                            Double ratingValue = detailSnapshot.child("danh_gia").getValue(Double.class);
+                            String danhGia = (ratingValue != null) ? String.valueOf(ratingValue) : "Chưa đánh giá";
+                            String trailerUrl = detailSnapshot.child("trailer").getValue(String.class);
 
-                    if (trailerUrl != null && !trailerUrl.isEmpty()) {
-                        String html = "<html><body style='margin:0;padding:0;'><iframe width=\"100%\" height=\"100%\" " +
-                                "src=\"" + trailerUrl + "\" frameborder=\"0\" allowfullscreen></iframe></body></html>";
-                        WebSettings webSettings = trailerWebView.getSettings();
-                        webSettings.setJavaScriptEnabled(true);
-                        trailerWebView.loadData(html, "text/html", "utf-8");
-                    } else {
-                        trailerWebView.setVisibility(View.GONE);
+                            // Diễn viên dạng list
+                            GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
+                            List<String> castList = detailSnapshot.child("dien_vien").getValue(t);
+                            String dienVien = (castList != null) ? TextUtils.join(", ", castList) : "Chưa rõ";
+
+                            if (tenPhim != null) titleDetail.setText(tenPhim);
+                            if (moTa != null) description.setText(moTa);
+                            if (khoiChieu != null) releaseDate.setText("Ngày chiếu: " + khoiChieu);
+                            if (thoiluongVal != null) thoiluong.setText("Thời lượng: " + thoiluongVal);
+                            if (daoDien != null) director.setText("Đạo diễn: " + daoDien);
+                            cast.setText("Diễn viên: " + dienVien);
+                            rating.setText("Đánh giá: " + danhGia + " ★");
+
+                            if (trailerUrl != null && !trailerUrl.isEmpty()) {
+                                String html = "<html><body style='margin:0;padding:0;'><iframe width=\"100%\" height=\"100%\" " +
+                                        "src=\"" + trailerUrl + "\" frameborder=\"0\" allowfullscreen></iframe></body></html>";
+                                WebSettings webSettings = trailerWebView.getSettings();
+                                webSettings.setJavaScriptEnabled(true);
+                                trailerWebView.loadData(html, "text/html", "utf-8");
+                            } else {
+                                trailerWebView.setVisibility(View.GONE);
+                            }
+                        } else {
+                            Toast.makeText(ChitietMovie_Activity.this, "Không tìm thấy chi tiết phim.", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
                     }
-                } else {
-                    Toast.makeText(ChitietMovie_Activity.this, "Phim không tồn tại trong hệ thống", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(ChitietMovie_Activity.this, "Lỗi khi tải chi tiết phim: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(ChitietMovie_Activity.this, "Lỗi khi tải dữ liệu", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ChitietMovie_Activity.this, "Lỗi khi tải poster phim: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                 finish();
             }
         });

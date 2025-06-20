@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/gray"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/etMovieTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Tên phim"
+            android:inputType="textCapSentences"
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/white"
+            android:textColorHint="#C3BDBD"
+            android:backgroundTint="@color/red" />
+
+        <EditText
+            android:id="@+id/etMoviePosterUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="URL Poster"
+            android:inputType="textUri"
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/white"
+            android:textColorHint="#C3BDBD"
+            android:backgroundTint="@color/red" />
+
+        <EditText
+            android:id="@+id/etMovieDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Mô tả"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:gravity="top|start"
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/white"
+            android:textColorHint="#C3BDBD"
+            android:backgroundTint="@color/red" />
+
+        <EditText
+            android:id="@+id/etMovieTrailerUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="URL Trailer (YouTube Embed)"
+            android:inputType="textUri"
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/white"
+            android:textColorHint="#C3BDBD"
+            android:backgroundTint="@color/red" />
+
+        <EditText
+            android:id="@+id/etMovieReleaseDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ngày chiếu (DD/MM/YYYY)"
+            android:inputType="date"
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/white"
+            android:textColorHint="#C3BDBD"
+            android:backgroundTint="@color/red" />
+
+        <EditText
+            android:id="@+id/etMovieDuration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Thời lượng (ví dụ: 120 phút)"
+            android:inputType="text"
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/white"
+            android:textColorHint="#C3BDBD"
+            android:backgroundTint="@color/red" />
+
+        <EditText
+            android:id="@+id/etMovieDirector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Đạo diễn"
+            android:inputType="textPersonName"
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/white"
+            android:textColorHint="#C3BDBD"
+            android:backgroundTint="@color/red" />
+
+        <EditText
+            android:id="@+id/etMovieCast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Diễn viên (cách nhau bởi dấu phẩy)"
+            android:inputType="textMultiLine"
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/white"
+            android:textColorHint="#C3BDBD"
+            android:backgroundTint="@color/red" />
+
+        <EditText
+            android:id="@+id/etMovieRating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Đánh giá (ví dụ: 5)"
+            android:inputType="numberDecimal"
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/white"
+            android:textColorHint="#C3BDBD"
+            android:backgroundTint="@color/red" />
+
+    </LinearLayout>
+</ScrollView>
