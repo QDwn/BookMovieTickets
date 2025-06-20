@@ -111,7 +111,8 @@ public class ChitietMovie_Activity extends AppCompatActivity {
         back.setOnClickListener(v -> finish());
 
         bookTicket.setOnClickListener(v -> {
-            Intent intent = new Intent(this, Datve_Activity.class);
+            Intent intent = new Intent(this, DatVe_Activity.class);
+            intent.putExtra("movieId", movieId);
             startActivity(intent);
         });
     }
