@@ -34,8 +34,7 @@ public class Movie {
         this.rating = null;
     }
 
-    // Constructor for movies loaded from Firebase (using imageUrl, and potentially full details)
-    // This constructor covers movies from 'danh_sach_phim' or 'movies' node with full details
+    // Constructor for movies loaded from Firebase with full details (for management)
     public Movie(String title, String imageUrl, String movieId, String description,
                  String trailerUrl, String releaseDate, String duration,
                  String director, List<String> cast, Double rating) {
@@ -51,7 +50,7 @@ public class Movie {
         this.rating = rating;
     }
 
-    // For simplicity when only title, imageUrl, movieId are available (e.g., from a partial Firebase load in HomeMovieAdapter)
+    // For simplicity when only title, imageUrl, movieId are available (e.g., from HomeMovieAdapter)
     public Movie(String title, String imageUrl, String movieId) {
         this.title = title;
         this.imageUrl = imageUrl;

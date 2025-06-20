@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -31,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger; // Thêm import này
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MovieManagementActivity extends AppCompatActivity implements MovieManagementAdapter.OnItemClickListener {
 
@@ -40,6 +42,7 @@ public class MovieManagementActivity extends AppCompatActivity implements MovieM
     private List<Movie> movieList;
     private DatabaseReference danhSachPhimRef; // Ref cho danh_sach_phim (poster, title)
     private DatabaseReference chiTietPhimRef;  // Ref cho chi_tiet_phim (full details)
+    private DatabaseReference counterRef; // Ref cho bộ đếm ID
     private Button btnAddMovie;
 
     @Override
@@ -53,6 +56,7 @@ public class MovieManagementActivity extends AppCompatActivity implements MovieM
         btnAddMovie = findViewById(R.id.btnAddMovie);
         danhSachPhimRef = FirebaseDatabase.getInstance().getReference("danh_sach_phim");
         chiTietPhimRef = FirebaseDatabase.getInstance().getReference("chi_tiet_phim");
+        counterRef = FirebaseDatabase.getInstance().getReference("counters").child("movieIdCounter"); // Khởi tạo counterRef
 
         movieList = new ArrayList<>();
         movieAdapter = new MovieManagementAdapter(movieList, this);
@@ -67,6 +71,7 @@ public class MovieManagementActivity extends AppCompatActivity implements MovieM
 
     private void loadMovies() {
         movieList.clear();
+        // Lấy thông tin cơ bản từ danh_sach_phim
         danhSachPhimRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot danhSachSnapshot) {
@@ -78,7 +83,6 @@ public class MovieManagementActivity extends AppCompatActivity implements MovieM
                     return;
                 }
 
-                // First, iterate through danh_sach_phim to get basic movie info (movieId, title, poster)
                 for (DataSnapshot movieBriefSnapshot : danhSachSnapshot.getChildren()) {
                     String movieId = movieBriefSnapshot.getKey();
                     String title = movieBriefSnapshot.child("ten_phim").getValue(String.class);
@@ -87,7 +91,7 @@ public class MovieManagementActivity extends AppCompatActivity implements MovieM
                     if (movieId != null && title != null && imageUrl != null) {
                         pendingDetailsFetches.incrementAndGet(); // Tăng số lượng chờ tải chi tiết
 
-                        // Then, fetch full details from chi_tiet_phim for each movie
+                        // Sau đó, lấy thông tin chi tiết từ chi_tiet_phim
                         chiTietPhimRef.child(movieId).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot detailSnapshot) {
@@ -100,12 +104,13 @@ public class MovieManagementActivity extends AppCompatActivity implements MovieM
                                 GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
                                 List<String> castList = detailSnapshot.child("dien_vien").getValue(t);
 
+                                // Tạo đối tượng Movie hoàn chỉnh
                                 Movie movie = new Movie(title, imageUrl, movieId, description, trailerUrl,
                                         releaseDate, duration, director, castList, rating);
                                 movieList.add(movie);
 
+                                // Giảm số lượng chờ và kiểm tra nếu tất cả đã tải xong
                                 if (pendingDetailsFetches.decrementAndGet() == 0) {
-                                    // All details fetched, update RecyclerView
                                     movieAdapter.notifyDataSetChanged();
                                 }
                             }
@@ -173,13 +178,15 @@ public class MovieManagementActivity extends AppCompatActivity implements MovieM
             String duration = etDuration.getText().toString().trim();
             String director = etDirector.getText().toString().trim();
             List<String> cast = Arrays.asList(etCast.getText().toString().trim().split(",\\s*"));
-            Double rating = 0.0;
+            Double currentRating = 0.0;
             try {
-                rating = Double.parseDouble(etRating.getText().toString().trim());
+                currentRating = Double.parseDouble(etRating.getText().toString().trim());
             } catch (NumberFormatException e) {
                 Toast.makeText(this, "Đánh giá phải là số.", Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            final Double finalRating = currentRating; // Biến effectively final
 
             if (title.isEmpty() || imageUrl.isEmpty() || description.isEmpty() ||
                     releaseDate.isEmpty() || duration.isEmpty() || director.isEmpty() || cast.isEmpty()) {
@@ -187,45 +194,98 @@ public class MovieManagementActivity extends AppCompatActivity implements MovieM
                 return;
             }
 
-            String targetMovieId;
             if (isEditMode) {
-                targetMovieId = movieToEdit.getMovieId();
+                String targetMovieId = movieToEdit.getMovieId();
+
+                // Dữ liệu cho danh_sach_phim (poster và ten_phim)
+                Map<String, Object> basicMovieData = new HashMap<>();
+                basicMovieData.put("ten_phim", title);
+                basicMovieData.put("poster", imageUrl);
+                basicMovieData.put("movieId", targetMovieId); // Luôn lưu movieId
+
+                // Dữ liệu cho chi_tiet_phim (tất cả các thông tin chi tiết)
+                Map<String, Object> detailedMovieData = new HashMap<>();
+                detailedMovieData.put("ten_phim", title); // Tiêu đề cũng có trong chi_tiet_phim
+                detailedMovieData.put("mo_ta", description);
+                detailedMovieData.put("trailer", trailerUrl);
+                detailedMovieData.put("khoi_chieu", releaseDate);
+                detailedMovieData.put("thoi_luong", duration);
+                detailedMovieData.put("dao_dien", director);
+                detailedMovieData.put("dien_vien", cast);
+                detailedMovieData.put("danh_gia", finalRating); // Sử dụng finalRating
+
+                // Thực hiện cập nhật vào cả hai node
+                Task<Void> updateBasicTask = danhSachPhimRef.child(targetMovieId).updateChildren(basicMovieData);
+                Task<Void> updateDetailedTask = chiTietPhimRef.child(targetMovieId).updateChildren(detailedMovieData);
+
+                Tasks.whenAllSuccess(updateBasicTask, updateDetailedTask)
+                        .addOnSuccessListener(results -> {
+                            Toast.makeText(MovieManagementActivity.this, "Đã cập nhật phim thành công!", Toast.LENGTH_SHORT).show();
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(MovieManagementActivity.this, "Lỗi khi lưu phim: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        });
+
             } else {
-                targetMovieId = danhSachPhimRef.push().getKey(); // Tạo ID mới
-                if (targetMovieId == null) {
-                    Toast.makeText(MovieManagementActivity.this, "Không thể tạo ID phim mới.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                // Logic để tăng ID tự động khi thêm phim mới
+                counterRef.runTransaction(new Transaction.Handler() {
+                    @NonNull
+                    @Override
+                    public Transaction.Result doTransaction(@NonNull MutableData currentData) {
+                        Integer currentId = currentData.getValue(Integer.class);
+                        if (currentId == null) {
+                            currentData.setValue(1); // Khởi tạo nếu chưa có
+                        } else {
+                            currentData.setValue(currentId + 1);
+                        }
+                        return Transaction.success(currentData);
+                    }
+
+                    @Override
+                    public void onComplete(@androidx.annotation.Nullable DatabaseError error, boolean committed, @androidx.annotation.Nullable DataSnapshot currentData) {
+                        if (committed) {
+                            Long newIdLong = currentData.getValue(Long.class);
+                            if (newIdLong != null) {
+                                // Dòng này đã được sửa để thêm tiền tố "id_phim"
+                                String newMovieId = "id_phim" + String.valueOf(newIdLong);
+
+                                // Dữ liệu cho danh_sach_phim
+                                Map<String, Object> basicMovieData = new HashMap<>();
+                                basicMovieData.put("ten_phim", title);
+                                basicMovieData.put("poster", imageUrl);
+                                basicMovieData.put("movieId", newMovieId); // Lưu movieId vào đây
+
+                                // Dữ liệu cho chi_tiet_phim
+                                Map<String, Object> detailedMovieData = new HashMap<>();
+                                detailedMovieData.put("ten_phim", title);
+                                detailedMovieData.put("mo_ta", description);
+                                detailedMovieData.put("trailer", trailerUrl);
+                                detailedMovieData.put("khoi_chieu", releaseDate);
+                                detailedMovieData.put("thoi_luong", duration);
+                                detailedMovieData.put("dao_dien", director);
+                                detailedMovieData.put("dien_vien", cast);
+                                detailedMovieData.put("danh_gia", finalRating); // Sử dụng finalRating
+
+                                // Thực hiện thêm vào cả hai node với ID mới
+                                Task<Void> addTaskBasic = danhSachPhimRef.child(newMovieId).setValue(basicMovieData);
+                                Task<Void> addTaskDetailed = chiTietPhimRef.child(newMovieId).setValue(detailedMovieData);
+
+                                Tasks.whenAllSuccess(addTaskBasic, addTaskDetailed)
+                                        .addOnSuccessListener(results -> {
+                                            Toast.makeText(MovieManagementActivity.this, "Đã thêm phim mới với ID: " + newMovieId, Toast.LENGTH_SHORT).show();
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(MovieManagementActivity.this, "Lỗi khi thêm phim: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                        });
+                            } else {
+                                Toast.makeText(MovieManagementActivity.this, "Lỗi: Không lấy được ID mới.", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(MovieManagementActivity.this, "Lỗi giao dịch ID: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
-
-            // Dữ liệu cho danh_sach_phim (poster và ten_phim)
-            Map<String, Object> basicMovieData = new HashMap<>();
-            basicMovieData.put("ten_phim", title);
-            basicMovieData.put("poster", imageUrl);
-
-            // Dữ liệu cho chi_tiet_phim (tất cả các thông tin chi tiết)
-            Map<String, Object> detailedMovieData = new HashMap<>();
-            detailedMovieData.put("ten_phim", title); // Tiêu đề cũng có trong chi_tiet_phim
-            detailedMovieData.put("mo_ta", description);
-            detailedMovieData.put("trailer", trailerUrl);
-            detailedMovieData.put("khoi_chieu", releaseDate);
-            detailedMovieData.put("thoi_luong", duration);
-            detailedMovieData.put("dao_dien", director);
-            detailedMovieData.put("dien_vien", cast);
-            detailedMovieData.put("danh_gia", rating);
-
-            // Thực hiện cập nhật/thêm vào cả hai node
-            Task<Void> updateBasicTask = danhSachPhimRef.child(targetMovieId).updateChildren(basicMovieData);
-            Task<Void> updateDetailedTask = chiTietPhimRef.child(targetMovieId).updateChildren(detailedMovieData);
-
-            Tasks.whenAllSuccess(updateBasicTask, updateDetailedTask)
-                    .addOnSuccessListener(results -> {
-                        Toast.makeText(MovieManagementActivity.this, isEditMode ? "Đã cập nhật phim thành công!" : "Đã thêm phim mới thành công!", Toast.LENGTH_SHORT).show();
-                        // loadMovies(); // Tải lại danh sách sau khi cập nhật (có thể cần độ trễ nếu Firebase chưa sync kịp)
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(MovieManagementActivity.this, "Lỗi khi lưu phim: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    });
         });
 
         builder.setNegativeButton("Hủy", null);
@@ -247,7 +307,6 @@ public class MovieManagementActivity extends AppCompatActivity implements MovieM
                         Tasks.whenAllSuccess(deleteTask1, deleteTask2)
                                 .addOnSuccessListener(results -> {
                                     Toast.makeText(MovieManagementActivity.this, "Đã xóa phim: " + movieToDelete.getTitle(), Toast.LENGTH_SHORT).show();
-                                    // loadMovies(); // Tải lại danh sách sau khi xóa (có thể cần độ trễ)
                                 })
                                 .addOnFailureListener(e -> {
                                     Toast.makeText(MovieManagementActivity.this, "Lỗi khi xóa phim: " + e.getMessage(), Toast.LENGTH_LONG).show();

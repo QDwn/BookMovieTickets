@@ -56,7 +56,7 @@ public class MovieManagementAdapter extends RecyclerView.Adapter<MovieManagement
         holder.tvMovieRating.setText("Đánh giá: " + (movie.getRating() != null ? String.format(Locale.getDefault(), "%.1f ★", movie.getRating()) : "N/A"));
 
         Glide.with(context)
-                .load(movie.getImageUrl())
+                .load(movie.getImageUrl()) // Lấy imageUrl từ đối tượng Movie
                 .placeholder(R.drawable.placeholder_poster)
                 .into(holder.ivMoviePoster);
 

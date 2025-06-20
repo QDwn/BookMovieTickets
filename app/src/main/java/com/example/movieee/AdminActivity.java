@@ -17,7 +17,7 @@ public class AdminActivity extends AppCompatActivity {
         TextView textView = findViewById(R.id.admin_text);
         textView.setText("Welcome, Admin!");
         Button btnManageUsers = findViewById(R.id.btnManageUsers);
-        Button btnManageMovies = findViewById(R.id.btnManageMovies); // Thêm dòng này
+        Button btnManageMovies = findViewById(R.id.btnManageMovies);
 
         btnManageUsers.setOnClickListener(new View.OnClickListener(){
             @Override

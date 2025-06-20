@@ -104,7 +104,7 @@
             android:id="@+id/etMovieRating"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Đánh giá (ví dụ: 5)"
+            android:hint="Đánh giá (ví dụ: 5.0)"
             android:inputType="numberDecimal"
             android:layout_marginBottom="8dp"
             android:textColor="@color/white"
