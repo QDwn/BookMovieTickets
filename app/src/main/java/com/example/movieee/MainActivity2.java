@@ -1,5 +1,6 @@
 package com.example.movieee;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -18,8 +19,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.bumptech.glide.Glide;
 import com.example.movieee.Adapter.HomeMovieAdapter;
 import com.example.movieee.Adapter.NowPlayingAdapter;
+import com.example.movieee.Adapter.RankingAdapter;
 import com.example.movieee.Model.Movie;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,21 +31,24 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity2 extends AppCompatActivity {
     private ViewPager2 nowPlayingViewPager;
     private RecyclerView bestMoviesRecyclerView;
+    private RecyclerView verticalRecyclerView;
     private RelativeLayout notificationPanel;
     private boolean isPanelShown = false;
 
-    List<Movie> nowPlayingMovies; // Khai báo
+    List<Movie> nowPlayingMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main2);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -51,6 +57,7 @@ public class MainActivity2 extends AppCompatActivity {
 
         nowPlayingViewPager = findViewById(R.id.now_playing_view_pager);
         bestMoviesRecyclerView = findViewById(R.id.view1);
+        verticalRecyclerView = findViewById(R.id.recycler_vertical);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -59,7 +66,8 @@ public class MainActivity2 extends AppCompatActivity {
         ImageButton bellButton = findViewById(R.id.bell_icon);
         bellButton.setOnClickListener(v -> toggleNotificationPanel());
 
-        loadMoviesFromFirebase(); // 🔥 Lấy dữ liệu và hiển thị poster + tên phim
+        loadMoviesFromFirebase();
+        loadVerticalMoviesFromFirebase();  // Dữ liệu vertical
     }
 
     private void toggleNotificationPanel() {
@@ -91,23 +99,19 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     public void onMenuButtonClick(View view) {
-        // Xử lý nút menu nếu cần
+        // Optional: xử lý menu
     }
 
     private void loadMoviesFromFirebase() {
-        // Hardcoded now playing movies
+        // Hardcoded Now Playing movies
         nowPlayingMovies = List.of(
                 new Movie("Movie 1", R.drawable.quydinh, "np_001"),
                 new Movie("Movie 2", R.drawable.rapphim, "np_002"),
-                new Movie("Movie 3", R.drawable.rapphim1, "np_003")  // Sửa tên để phân biệt
+                new Movie("Movie 3", R.drawable.rapphim1, "np_003")
         );
         setupNowPlayingViewPager(nowPlayingMovies);
 
-
-        // Fetch movies for "Best Movies" (HomeMovieAdapter) from danh_sach_phim
-        // This will only fetch poster URL and title as per user's request for this section
         DatabaseReference movieListRef = FirebaseDatabase.getInstance().getReference("danh_sach_phim");
-
         movieListRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -115,10 +119,9 @@ public class MainActivity2 extends AppCompatActivity {
                 for (DataSnapshot movieSnapshot : snapshot.getChildren()) {
                     String movieId = movieSnapshot.getKey();
                     String title = movieSnapshot.child("ten_phim").getValue(String.class);
-                    String imageUrl = movieSnapshot.child("poster").getValue(String.class); // Lấy link ảnh từ danh_sach_phim
+                    String imageUrl = movieSnapshot.child("poster").getValue(String.class);
 
                     if (title != null && imageUrl != null && movieId != null) {
-                        // Using the constructor that takes title, imageUrl, movieId for the home screen list
                         bestMovieList.add(new Movie(title, imageUrl, movieId));
                     }
                 }
@@ -127,7 +130,44 @@ public class MainActivity2 extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError error) {
-                Toast.makeText(MainActivity2.this, "Lỗi tải dữ liệu từ Firebase", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity2.this, "Lỗi tải danh sách phim", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadVerticalMoviesFromFirebase() {
+        DatabaseReference movieDetailRef = FirebaseDatabase.getInstance().getReference("chi_tiet_phim");
+
+        movieDetailRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                List<Movie> verticalList = new ArrayList<>();
+
+                for (DataSnapshot movieSnapshot : snapshot.getChildren()) {
+                    String movieId = movieSnapshot.getKey();
+                    if (movieId == null || !movieId.matches("id_phim(1[1-9]|[2-9][0-9]|[1-9][0-9]{2,})")) continue;
+                    String title = movieSnapshot.child("ten_phim").getValue(String.class);
+                    String poster = movieSnapshot.child("imageUrl").getValue(String.class);
+                    String duration = movieSnapshot.child("thoi_luong").getValue(String.class);
+                    Double rating = movieSnapshot.child("danh_gia").getValue(Double.class);
+
+                    Movie movie = new Movie(title, poster, movieId);
+                    movie.setDuration(duration);
+                    movie.setRating(rating);
+                    verticalList.add(movie);
+                }
+
+                // Sắp xếp theo đánh giá giảm dần
+                verticalList.sort(Comparator.comparing((Movie m) -> m.getRating() != null ? m.getRating() : 0.0).reversed());
+
+                RankingAdapter adapter = new RankingAdapter(verticalList, MainActivity2.this);
+                verticalRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity2.this, LinearLayoutManager.VERTICAL, false));
+                verticalRecyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(MainActivity2.this, "Lỗi tải phim đánh giá cao", Toast.LENGTH_SHORT).show();
             }
         });
     }
