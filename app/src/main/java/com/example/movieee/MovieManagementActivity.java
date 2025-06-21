@@ -103,10 +103,11 @@ public class MovieManagementActivity extends AppCompatActivity implements MovieM
                                 Double rating = detailSnapshot.child("danh_gia").getValue(Double.class);
                                 GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
                                 List<String> castList = detailSnapshot.child("dien_vien").getValue(t);
+                                List<String> theLoai = detailSnapshot.child("the_loai").getValue(t);
 
                                 // Tạo đối tượng Movie hoàn chỉnh
                                 Movie movie = new Movie(title, imageUrl, movieId, description, trailerUrl,
-                                        releaseDate, duration, director, castList, rating);
+                                        releaseDate, duration, director, castList,theLoai, rating);
                                 movieList.add(movie);
 
                                 // Giảm số lượng chờ và kiểm tra nếu tất cả đã tải xong

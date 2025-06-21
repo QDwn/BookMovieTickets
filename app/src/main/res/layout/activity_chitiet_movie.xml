@@ -91,6 +91,16 @@
             android:textColor="@color/white"
             android:text="Diễn viên:" />
 
+        <!--Thể loại-->
+        <TextView
+            android:id="@+id/theloai"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:text="Thể loại:" />
+
         <!-- Đánh giá -->
         <TextView
             android:id="@+id/rating"

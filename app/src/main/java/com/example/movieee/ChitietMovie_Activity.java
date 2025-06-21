@@ -26,7 +26,7 @@ import java.util.List;
 public class ChitietMovie_Activity extends AppCompatActivity {
 
     private WebView trailerWebView;
-    private TextView titleDetail, description, releaseDate, director, cast, rating, thoiluong;
+    private TextView titleDetail, description, releaseDate, director, cast, rating, thoiluong, theloai;
     private Button bookTicket;
     private ImageButton back;
 
@@ -46,6 +46,7 @@ public class ChitietMovie_Activity extends AppCompatActivity {
         cast = findViewById(R.id.cast);
         rating = findViewById(R.id.rating);
         bookTicket = findViewById(R.id.book_ticket);
+        theloai = findViewById(R.id.theloai);
 
         // Nhận movieId từ intent
         String movieId = getIntent().getStringExtra("movieId");
@@ -89,6 +90,10 @@ public class ChitietMovie_Activity extends AppCompatActivity {
                             GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
                             List<String> castList = detailSnapshot.child("dien_vien").getValue(t);
                             String dienVien = (castList != null) ? TextUtils.join(", ", castList) : "Chưa rõ";
+
+                            List<String> theLoaiList = detailSnapshot.child("the_loai").getValue(t);
+                            String theLoaiStr = (theLoaiList != null) ? TextUtils.join(", ", theLoaiList) : "Chưa rõ";
+                            theloai.setText("Thể loại: " + theLoaiStr);
 
                             if (tenPhim != null) titleDetail.setText(tenPhim);
                             if (moTa != null) description.setText(moTa);

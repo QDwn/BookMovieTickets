@@ -19,18 +19,27 @@ import com.google.android.material.imageview.ShapeableImageView;
 import java.util.List;
 
 public class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.HomeMovieViewHolder> {
+
     private List<Movie> movieList;
     private Context context;
+    private int layoutId;
 
+    // ✅ Constructor mặc định — dùng layout item mặc định cũ
     public HomeMovieAdapter(List<Movie> movieList, Context context) {
+        this(movieList, context, R.layout.activity_item_movie); // Gọi constructor chính
+    }
+
+    // ✅ Constructor mới — cho phép truyền layout tuỳ ý
+    public HomeMovieAdapter(List<Movie> movieList, Context context, int layoutId) {
         this.movieList = movieList;
         this.context = context;
+        this.layoutId = layoutId;
     }
 
     @NonNull
     @Override
     public HomeMovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.activity_item_movie, parent, false);
+        View view = LayoutInflater.from(context).inflate(layoutId, parent, false);
         return new HomeMovieViewHolder(view);
     }
 
@@ -44,7 +53,7 @@ public class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.Home
                 .placeholder(R.drawable.placeholder_poster)
                 .into(holder.moviePoster);
 
-        holder.moviePoster.setOnClickListener(v -> {
+        holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, ChitietMovie_Activity.class);
             intent.putExtra("movieId", movie.getMovieId());
             context.startActivity(intent);

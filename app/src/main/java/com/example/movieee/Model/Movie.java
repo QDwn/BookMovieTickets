@@ -13,6 +13,7 @@ public class Movie {
     private String duration;
     private String director;
     private List<String> cast;
+    private List<String> theLoai;
     private Double rating;
 
     public Movie() {
@@ -37,7 +38,7 @@ public class Movie {
     // Constructor for movies loaded from Firebase with full details (for management)
     public Movie(String title, String imageUrl, String movieId, String description,
                  String trailerUrl, String releaseDate, String duration,
-                 String director, List<String> cast, Double rating) {
+                 String director, List<String> cast, List<String> theLoai, Double rating) {
         this.title = title;
         this.imageUrl = imageUrl;
         this.movieId = movieId;
@@ -47,6 +48,7 @@ public class Movie {
         this.duration = duration;
         this.director = director;
         this.cast = cast;
+        this.theLoai = theLoai;
         this.rating = rating;
     }
 
@@ -62,6 +64,7 @@ public class Movie {
         this.duration = null;
         this.director = null;
         this.cast = null;
+        this.theLoai = null;
         this.rating = null;
     }
 
@@ -77,6 +80,7 @@ public class Movie {
     public String getDuration() { return duration; }
     public String getDirector() { return director; }
     public List<String> getCast() { return cast; }
+    public List<String> getTheLoai() { return theLoai; }
     public Double getRating() { return rating; }
 
     // Setters
@@ -90,5 +94,6 @@ public class Movie {
     public void setDuration(String duration) { this.duration = duration; }
     public void setDirector(String director) { this.director = director; }
     public void setCast(List<String> cast) { this.cast = cast; }
+    public void setTheLoai(List<String> theLoai) { this.theLoai = theLoai; }
     public void setRating(Double rating) { this.rating = rating; }
 }
