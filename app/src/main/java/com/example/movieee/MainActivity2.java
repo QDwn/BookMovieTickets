@@ -36,6 +36,8 @@ public class MainActivity2 extends AppCompatActivity {
     private RelativeLayout notificationPanel;
     private boolean isPanelShown = false;
 
+    List<Movie> nowPlayingMovies; // Khai báo
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,25 +95,34 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     private void loadMoviesFromFirebase() {
+        // Hardcoded now playing movies
+        nowPlayingMovies = List.of(
+                new Movie("Movie 1", R.drawable.quydinh, "np_001"),
+                new Movie("Movie 2", R.drawable.rapphim, "np_002"),
+                new Movie("Movie 3", R.drawable.rapphim1, "np_003")  // Sửa tên để phân biệt
+        );
+        setupNowPlayingViewPager(nowPlayingMovies);
+
+
+        // Fetch movies for "Best Movies" (HomeMovieAdapter) from danh_sach_phim
+        // This will only fetch poster URL and title as per user's request for this section
         DatabaseReference movieListRef = FirebaseDatabase.getInstance().getReference("danh_sach_phim");
 
         movieListRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                List<Movie> movieList = new ArrayList<>();
+                List<Movie> bestMovieList = new ArrayList<>();
                 for (DataSnapshot movieSnapshot : snapshot.getChildren()) {
                     String movieId = movieSnapshot.getKey();
                     String title = movieSnapshot.child("ten_phim").getValue(String.class);
-                    String imageUrl = movieSnapshot.child("poster").getValue(String.class);
+                    String imageUrl = movieSnapshot.child("poster").getValue(String.class); // Lấy link ảnh từ danh_sach_phim
 
-                    if (title != null && imageUrl != null) {
-                        movieList.add(new Movie(title, imageUrl, movieId));
+                    if (title != null && imageUrl != null && movieId != null) {
+                        // Using the constructor that takes title, imageUrl, movieId for the home screen list
+                        bestMovieList.add(new Movie(title, imageUrl, movieId));
                     }
                 }
-
-                // Dùng chung adapter để hiển thị hình + tiêu đề
-                setupBestMoviesRecyclerView(movieList);
-                setupNowPlayingViewPager(nowPlayingMovies);
+                setupBestMoviesRecyclerView(bestMovieList);
             }
 
             @Override
@@ -120,11 +131,7 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
     }
-    List<Movie> nowPlayingMovies = List.of(
-            new Movie("Movie 1", R.drawable.quydinh),
-            new Movie("Movie 2", R.drawable.rapphim),
-            new Movie("Movie 2", R.drawable.rapphim1)
-    );
+
     private void setupNowPlayingViewPager(List<Movie> movies) {
         NowPlayingAdapter adapter = new NowPlayingAdapter(movies, this);
         nowPlayingViewPager.setAdapter(adapter);

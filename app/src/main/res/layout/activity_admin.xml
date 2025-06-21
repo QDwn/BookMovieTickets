@@ -21,4 +21,12 @@
         android:layout_marginTop="20dp"
         android:backgroundTint="#810C0C"
         android:text="Quản lý Người dùng" />
+
+    <Button
+        android:id="@+id/btnManageMovies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="#810C0C"
+        android:text="Quản lý Phim" />
 </LinearLayout>

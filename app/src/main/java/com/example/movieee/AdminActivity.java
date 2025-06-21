@@ -17,10 +17,21 @@ public class AdminActivity extends AppCompatActivity {
         TextView textView = findViewById(R.id.admin_text);
         textView.setText("Welcome, Admin!");
         Button btnManageUsers = findViewById(R.id.btnManageUsers);
+        Button btnManageMovies = findViewById(R.id.btnManageMovies);
+
         btnManageUsers.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AdminActivity.this, UserManagementActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Thêm Listener cho nút Quản lý Phim
+        btnManageMovies.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdminActivity.this, MovieManagementActivity.class);
                 startActivity(intent);
             }
         });
