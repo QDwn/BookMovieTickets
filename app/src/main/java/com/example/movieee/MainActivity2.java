@@ -134,10 +134,14 @@ public class MainActivity2 extends AppCompatActivity {
             // Hiện tại đã ở Home (MainActivity2), không cần làm gì hoặc có thể refresh
             Toast.makeText(this, "Bạn đang ở Trang chủ", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.btn_ticket) { // Ví dụ cho nút Ticket
-            // Xử lý chuyển hướng đến màn hình vé của người dùng
-            // Intent intent = new Intent(MainActivity2.this, TicketActivity.class);
-            // startActivity(intent);
-            Toast.makeText(this, "Chức năng Vé đang được phát triển", Toast.LENGTH_SHORT).show();
+            if (mAuth.getCurrentUser() != null) {
+                Intent intent = new Intent(MainActivity2.this, UserTicketsActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, "Bạn cần đăng nhập để xem vé đã đặt.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity2.this, LoginActivity.class);
+                startActivity(intent);
+            }
         } else if (id == R.id.btn_movie) { // Ví dụ cho nút Movie
             // Có thể chuyển hướng đến danh sách phim (nếu có màn hình riêng)
             Toast.makeText(this, "Chức năng Phim đang được phát triển", Toast.LENGTH_SHORT).show();

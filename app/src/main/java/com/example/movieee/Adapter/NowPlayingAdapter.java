@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView; // Thêm import này
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,6 +41,9 @@ public class NowPlayingAdapter extends RecyclerView.Adapter<NowPlayingAdapter.No
                 .load(movie.getImageResId()) // lấy ảnh từ máy
                 .placeholder(R.drawable.placeholder_poster)
                 .into(holder.moviePoster);
+
+        holder.movieTitle.setText(movie.getTitle()); // Thêm dòng này để đặt tiêu đề phim
+
         holder.moviePoster.setOnClickListener(v -> {
             Intent intent = new Intent(context, ChitietMovie_Activity.class);
             intent.putExtra("movieId", movie.getMovieId()); // truyền ID
@@ -54,10 +58,12 @@ public class NowPlayingAdapter extends RecyclerView.Adapter<NowPlayingAdapter.No
 
     public static class NowPlayingViewHolder extends RecyclerView.ViewHolder {
         ShapeableImageView moviePoster;
+        TextView movieTitle; // Khai báo TextView movieTitle
 
         public NowPlayingViewHolder(@NonNull View itemView) {
             super(itemView);
             moviePoster = itemView.findViewById(R.id.movie_poster);
+            movieTitle = itemView.findViewById(R.id.movie_title); // Khởi tạo TextView movieTitle
         }
     }
 }

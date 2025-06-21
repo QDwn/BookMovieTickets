@@ -198,6 +198,12 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d("LoginActivity", "Google sign-in successful with Firebase.");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            if (user != null && user.getEmail() != null) {
+                                String username = user.getDisplayName() != null ? user.getDisplayName() : user.getEmail();
+                                // THÊM DÒNG LOG NÀY
+                                Log.d("LoginActivityDebug", "Saving to SharedPreferences (Google): Email = " + user.getEmail() + ", Username = " + username);
+                                saveUserInfoToSharedPreferences(user.getEmail(), username);
+                            }
                             updateUI(user);
                         } else {
                             Log.w("LoginActivity", "Google sign-in failed with Firebase.", task.getException());
@@ -213,7 +219,7 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             Toast.makeText(LoginActivity.this, "Signed in as: " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            Intent intent = new Intent(LoginActivity.this, MainActivity2.class);
             startActivity(intent);
             finish();
         } else {
@@ -288,21 +294,23 @@ public class LoginActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     loginEmail.setError(null);
-                    // Duy duyệt qua các kết quả (thường chỉ có 1 nếu email là duy nhất)
                     for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                        HelperClass user = userSnapshot.getValue(HelperClass.class); // Lấy đối tượng HelperClass
+                        HelperClass user = userSnapshot.getValue(HelperClass.class);
                         if (user != null) {
                             String passwordFromDB = user.getPassword();
 
                             if (passwordFromDB != null && passwordFromDB.equals(userPassword)) {
                                 loginPassWord.setError(null);
-                                // Đăng nhập người dùng vào Firebase Authentication SAU KHI xác minh trong Realtime Database
                                 mAuth.signInWithEmailAndPassword(userEmail, userPassword)
                                         .addOnCompleteListener(LoginActivity.this, task -> {
                                             if (task.isSuccessful()) {
-                                                // Đăng nhập Firebase Auth thành công
-                                                // Lưu thông tin đăng nhập nếu "Remember Me" được chọn
                                                 saveLoginDetails(userEmail, userPassword, rememberMe);
+                                                // Gọi hàm lưu thông tin người dùng vào SharedPreferences tại đây
+                                                // Lấy username từ HelperClass hoặc sử dụng email
+                                                // THÊM DÒNG LOG NÀY
+                                                Log.d("LoginActivityDebug", "Saving to SharedPreferences (Traditional): Email = " + user.getEmail() + ", Username = " + user.getUsername());
+                                                saveUserInfoToSharedPreferences(user.getEmail(), user.getUsername());
+
 
                                                 String role = user.getRole();
 
@@ -315,8 +323,6 @@ public class LoginActivity extends AppCompatActivity {
                                                 }
                                                 finish();
                                             } else {
-                                                // Đăng nhập Firebase Auth thất bại. Có thể tài khoản chưa được tạo trong Authentication.
-                                                // Bạn nên đảm bảo tài khoản được tạo trong Firebase Authentication khi đăng ký.
                                                 Toast.makeText(LoginActivity.this, "Đăng nhập Firebase Auth thất bại: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         });
@@ -344,5 +350,6 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString("user_email", email);
         editor.putString("user_username", username);
         editor.apply();
+        Log.d("SharedPreferences", "Email saved: " + email);
     }
 }

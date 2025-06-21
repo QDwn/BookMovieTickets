@@ -30,6 +30,7 @@ public class DatGhe_Activity extends AppCompatActivity implements SeatAdapter.On
     private RecyclerView recyclerGhe;
     private TextView txtGheDaChon;
     private Button btnXacNhan;
+    private String movieTitle;
     private TextView txtTongTien;
     private static final int GIA_GHE = 50000;
 
@@ -56,6 +57,7 @@ public class DatGhe_Activity extends AppCompatActivity implements SeatAdapter.On
         ngay = getIntent().getStringExtra("ngay");
         diaDiem = getIntent().getStringExtra("diaDiem");
         gio = getIntent().getStringExtra("gio");
+        movieTitle = getIntent().getStringExtra("movieTitle");
 
         generateSeatList();
 
@@ -76,6 +78,7 @@ public class DatGhe_Activity extends AppCompatActivity implements SeatAdapter.On
             }
             Intent intent = new Intent(this, BongNuoc_Activity.class);
             intent.putExtra("movieId", movieId);
+            intent.putExtra("movieTitle", movieTitle);
             intent.putExtra("ngay", ngay);
             intent.putExtra("diaDiem", diaDiem);
             intent.putExtra("gio", gio);

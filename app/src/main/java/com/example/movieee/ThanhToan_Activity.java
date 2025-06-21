@@ -26,21 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-// LOẠI BỎ: import java.util.concurrent.Executors;
 
-// LOẠI BỎ: các imports cho ZaloPay và OkHttp
-// import okhttp3.Call;
-// import okhttp3.Callback;
-// import okhttp3.MediaType;
-// import okhttp3.OkHttpClient;
-// import okhttp3.Request;
-// import okhttp3.RequestBody;
-// import okhttp3.Response;
-// import org.json.JSONArray;
-// import org.json.JSONException;
-// import org.json.JSONObject;
-// import vn.zalopay.sdk.ZaloPaySDK;
-// import vn.zalopay.sdk.listeners.PayOrderListener;
 
 public class ThanhToan_Activity extends AppCompatActivity {
 
@@ -56,9 +42,6 @@ public class ThanhToan_Activity extends AppCompatActivity {
     private String userEmail;
     private String userName;
 
-    // LOẠI BỎ: private OkHttpClient httpClient;
-    // LOẠI BỎ: private static final String BACKEND_URL = "YOUR_BACKEND_SERVER_URL";
-    // LOẠI BỎ: private static final int ZALOPAY_APP_ID = 2553;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +55,6 @@ public class ThanhToan_Activity extends AppCompatActivity {
         tvTotalPrice = findViewById(R.id.tvTotalPrice);
         btnConfirmPayment = findViewById(R.id.btnConfirmPayment);
 
-        // LOẠI BỎ: httpClient = new OkHttpClient();
 
         // Lấy dữ liệu từ Intent
         Intent intent = getIntent();
@@ -93,6 +75,8 @@ public class ThanhToan_Activity extends AppCompatActivity {
             userEmail = sharedPref.getString("user_email", "guest");
             userName = sharedPref.getString("user_username", "Guest User");
 
+            Log.d("ThanhToanDebug", "User Email retrieved from SharedPreferences for booking: " + userEmail);
+
             // Hiển thị thông tin
             tvMovieInfo.setText(String.format("Phim: %s\nNgày: %s\nRạp: %s\nGiờ: %s", movieTitle, ngay, diaDiem, gio));
             tvSelectedSeats.setText("Ghế đã chọn: " + (selectedSeats != null ? String.join(", ", selectedSeats) : "Không có"));
@@ -108,7 +92,6 @@ public class ThanhToan_Activity extends AppCompatActivity {
             confirmPayment(); // Gọi lại phương thức thanh toán Firebase trực tiếp
         });
 
-        // LOẠI BỎ: ZaloPaySDK.init(ZALOPAY_APP_ID);
     }
 
     // Phương thức confirmPayment (đã khôi phục và tinh chỉnh)

@@ -175,7 +175,7 @@ public class DatVe_Activity extends AppCompatActivity {
 
             Intent intent = new Intent(this, DatGhe_Activity.class);
             intent.putExtra("movieId", movieId);
-            intent.putExtra("movieTitle", movieTitle); // Truyền tên phim
+            intent.putExtra("movieTitle", movieTitle);
             intent.putExtra("ngay", selectedDate);
             intent.putExtra("diaDiem", selectedLocation);
             intent.putExtra("gio", selectedTime);
