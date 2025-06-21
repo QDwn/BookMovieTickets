@@ -69,6 +69,9 @@
         <activity
             android:name=".BongNuoc_Activity"
             android:exported="false" />
+        <activity
+            android:name=".TheLoai_Activity"
+            android:exported="false"/>
     </application>
 
 </manifest>

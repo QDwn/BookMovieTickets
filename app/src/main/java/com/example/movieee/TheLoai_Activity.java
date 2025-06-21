@@ -36,7 +36,7 @@ public class TheLoai_Activity extends AppCompatActivity {
         tvTheLoaiTitle = findViewById(R.id.tvTheLoaiTitle);
 
         // Nhận thể loại từ Intent
-        theLoai = getIntent().getStringExtra("theloai");
+        theLoai = getIntent().getStringExtra("genre");
         tvTheLoaiTitle.setText("Thể loại: " + theLoai);
 
         // Khởi tạo list và adapter

@@ -5,6 +5,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -40,6 +41,7 @@ public class MainActivity2 extends AppCompatActivity {
     private RecyclerView verticalRecyclerView;
     private RelativeLayout notificationPanel;
     private boolean isPanelShown = false;
+    Button btnHanhDong, btnHoatHinh, btnChinhKich, btnPhieuLuu, btnKinhDi;
 
     List<Movie> nowPlayingMovies;
 
@@ -65,6 +67,18 @@ public class MainActivity2 extends AppCompatActivity {
 
         ImageButton bellButton = findViewById(R.id.bell_icon);
         bellButton.setOnClickListener(v -> toggleNotificationPanel());
+
+        btnHanhDong = findViewById(R.id.btnHanhDong);
+        btnHoatHinh = findViewById(R.id.btnHoatHinh);
+        btnChinhKich = findViewById(R.id.btnChinhKich);
+        btnPhieuLuu = findViewById(R.id.btnPhieuLuu);
+        btnKinhDi = findViewById(R.id.btnKinhDi);
+
+        btnHanhDong.setOnClickListener(v -> openTheLoai("Hành động"));
+        btnHoatHinh.setOnClickListener(v -> openTheLoai("Hoạt hình"));
+        btnChinhKich.setOnClickListener(v -> openTheLoai("Chính kịch"));
+        btnPhieuLuu.setOnClickListener(v -> openTheLoai("Phiêu lưu"));
+        btnKinhDi.setOnClickListener(v -> openTheLoai("Kinh dị"));
 
         loadMoviesFromFirebase();
         loadVerticalMoviesFromFirebase();  // Dữ liệu vertical
@@ -181,5 +195,10 @@ public class MainActivity2 extends AppCompatActivity {
         HomeMovieAdapter adapter = new HomeMovieAdapter(movies, this);
         bestMoviesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         bestMoviesRecyclerView.setAdapter(adapter);
+    }
+    private void openTheLoai(String theLoai) {
+        Intent intent = new Intent(MainActivity2.this, TheLoai_Activity.class);
+        intent.putExtra("genre", theLoai);
+        startActivity(intent);
     }
 }
