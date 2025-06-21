@@ -1,12 +1,14 @@
 package com.example.movieee;
 
 import android.content.Intent;
-import android.content.SharedPreferences; // Đã thêm import SharedPreferences
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.text.method.HideReturnsTransformationMethod; // Thêm import này
+import android.text.method.PasswordTransformationMethod; // Thêm import này
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox; // Đã thêm import CheckBox
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -43,7 +45,8 @@ public class LoginActivity extends AppCompatActivity {
     Button loginButton;
     TextView signupRedirectText, forgotPasswordText;
     ImageView imageViewGoogle, imageViewFacebook, imageViewInstagram;
-    CheckBox rememberMeCheckbox; // Khai báo CheckBox
+    CheckBox rememberMeCheckbox;
+    ImageView eyeIconLogin; // Khai báo ImageView cho icon con mắt
 
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
@@ -67,9 +70,10 @@ public class LoginActivity extends AppCompatActivity {
         signupRedirectText = findViewById(R.id.textsignup);
         forgotPasswordText = findViewById(R.id.textForgotPassword);
         imageViewGoogle = findViewById(R.id.imageViewGoogle);
-        imageViewFacebook = findViewById(R.id.imageViewFacebook);
-        imageViewInstagram = findViewById(R.id.imageViewInstagram);
-        rememberMeCheckbox = findViewById(R.id.checkBox2);
+        imageViewFacebook = findViewById(R.id.imageViewFacebook); // Ánh xạ ID
+        imageViewInstagram = findViewById(R.id.imageViewInstagram); // Ánh xạ ID
+        rememberMeCheckbox = findViewById(R.id.checkBox2); // Ánh xạ CheckBox
+        eyeIconLogin = findViewById(R.id.eye_icon_login); // Ánh xạ ImageView cho icon con mắt
 
         // Cấu hình Google Sign-In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -80,6 +84,27 @@ public class LoginActivity extends AppCompatActivity {
 
         // Tải thông tin đăng nhập đã lưu (nếu có)
         loadSavedLoginDetails();
+
+        // Xử lý hiển thị/ẩn mật khẩu
+        final boolean[] isPasswordVisible = {false}; // Biến trạng thái mật khẩu
+
+        eyeIconLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isPasswordVisible[0]) {
+                    // Ẩn mật khẩu
+                    loginPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    eyeIconLogin.setImageResource(R.drawable.ic_eye_off); // Cần drawable ic_eye_off
+                } else {
+                    // Hiện mật khẩu
+                    loginPassWord.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    eyeIconLogin.setImageResource(R.drawable.ic_eye); // Cần drawable ic_eye
+                }
+                isPasswordVisible[0] = !isPasswordVisible[0];
+                loginPassWord.setSelection(loginPassWord.length()); // Giữ con trỏ ở cuối
+            }
+        });
+
 
         // Listener cho nút Đăng nhập truyền thống
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -256,14 +281,15 @@ public class LoginActivity extends AppCompatActivity {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
         // Truy vấn dựa trên trường 'email' bên trong các node con
         Query checkUserDatabase = reference.orderByChild("email").equalTo(userEmail);
+
         checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     loginEmail.setError(null);
-                    // Duyệt qua các kết quả (thường chỉ có 1 nếu email là duy nhất)
+                    // Duy duyệt qua các kết quả (thường chỉ có 1 nếu email là duy nhất)
                     for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                        HelperClass user = userSnapshot.getValue(HelperClass.class); // Lấy đối tượng HelperClass [cite: uploaded:qdwn/bookmovietickets/QDwn-BookMovieTickets-6c8cc18/app/src/main/java/com/example/movieee/LoginActivity.java]
+                        HelperClass user = userSnapshot.getValue(HelperClass.class); // Lấy đối tượng HelperClass
                         if (user != null) {
                             String passwordFromDB = user.getPassword();
 
@@ -291,10 +317,6 @@ public class LoginActivity extends AppCompatActivity {
                                                 // Đăng nhập Firebase Auth thất bại. Có thể tài khoản chưa được tạo trong Authentication.
                                                 // Bạn nên đảm bảo tài khoản được tạo trong Firebase Authentication khi đăng ký.
                                                 Toast.makeText(LoginActivity.this, "Đăng nhập Firebase Auth thất bại: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                                // Tùy chọn: vẫn cho phép vào nếu Realtime DB ok, nhưng không lý tưởng
-                                                // Nếu bạn muốn người dùng vẫn vào được ứng dụng ngay cả khi Authentication thất bại (nhưng DB OK),
-                                                // hãy di chuyển phần Intent bên dưới ra ngoài khối else này.
-                                                // Tuy nhiên, tốt nhất là nên đồng bộ Firebase Auth và Realtime DB.
                                             }
                                         });
                                 return;
