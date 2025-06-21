@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@color/gray"> <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Chi tiết vé"
+    android:textColor="@color/white"
+    android:textSize="22sp"
+    android:textStyle="bold"
+    android:gravity="center"
+    android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:id="@+id/tvDetailMovieTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"
+        android:text="Phim: "/>
+
+    <TextView
+        android:id="@+id/tvDetailUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:layout_marginBottom="4dp"
+        android:text="Người đặt: "/>
+
+    <TextView
+        android:id="@+id/tvDetailEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:layout_marginBottom="4dp"
+        android:text="Email: "/>
+
+    <TextView
+        android:id="@+id/tvDetailTicketId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:layout_marginBottom="4dp"
+        android:text="Mã vé: "/>
+
+    <TextView
+        android:id="@+id/tvDetailDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:layout_marginBottom="4dp"
+        android:text="Ngày chiếu: "/>
+
+    <TextView
+        android:id="@+id/tvDetailTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:layout_marginBottom="4dp"
+        android:text="Giờ chiếu: "/>
+
+    <TextView
+        android:id="@+id/tvDetailLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:layout_marginBottom="4dp"
+        android:text="Rạp: "/>
+
+    <TextView
+        android:id="@+id/tvDetailSeats"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:layout_marginBottom="4dp"
+        android:text="Ghế đã chọn: "/>
+
+    <TextView
+        android:id="@+id/tvDetailTotalAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#FFD700"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:text="Tổng cộng: "/>
+
+    <Button
+        android:id="@+id/btnDetailClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đóng"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/red"
+        android:textColor="@color/white"/>
+
+</LinearLayout>

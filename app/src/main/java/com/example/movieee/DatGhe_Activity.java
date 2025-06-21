@@ -30,6 +30,7 @@ public class DatGhe_Activity extends AppCompatActivity implements SeatAdapter.On
     private RecyclerView recyclerGhe;
     private TextView txtGheDaChon;
     private Button btnXacNhan;
+    private String movieTitle;
     private TextView txtTongTien;
     private static final int GIA_GHE = 50000;
 
@@ -37,6 +38,9 @@ public class DatGhe_Activity extends AppCompatActivity implements SeatAdapter.On
     private String movieId, ngay, diaDiem, gio;
     private List<Seat> seatList = new ArrayList<>();
     private SeatAdapter seatAdapter;
+
+    // Biến để lưu tổng tiền ghế
+    private int currentSeatTotalPrice = 0; // Thêm biến này
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,7 @@ public class DatGhe_Activity extends AppCompatActivity implements SeatAdapter.On
         ngay = getIntent().getStringExtra("ngay");
         diaDiem = getIntent().getStringExtra("diaDiem");
         gio = getIntent().getStringExtra("gio");
+        movieTitle = getIntent().getStringExtra("movieTitle");
 
         generateSeatList();
 
@@ -73,10 +78,12 @@ public class DatGhe_Activity extends AppCompatActivity implements SeatAdapter.On
             }
             Intent intent = new Intent(this, BongNuoc_Activity.class);
             intent.putExtra("movieId", movieId);
+            intent.putExtra("movieTitle", movieTitle);
             intent.putExtra("ngay", ngay);
             intent.putExtra("diaDiem", diaDiem);
             intent.putExtra("gio", gio);
             intent.putStringArrayListExtra("selectedSeats", new ArrayList<>(selectedSeats));
+            intent.putExtra("seatTotalPrice", currentSeatTotalPrice); // Truyền tổng tiền ghế đã chọn
             startActivity(intent);
         });
     }
@@ -133,10 +140,10 @@ public class DatGhe_Activity extends AppCompatActivity implements SeatAdapter.On
     @Override
     public void onSeatSelected(List<String> selectedSeats) {
         txtGheDaChon.setText("Ghế đã chọn: " + String.join(", ", selectedSeats));
-        int tongTien = selectedSeats.size() * GIA_GHE;
+        currentSeatTotalPrice = selectedSeats.size() * GIA_GHE; // Cập nhật biến này
 
         NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
-        String formatted = formatter.format(tongTien);
+        String formatted = formatter.format(currentSeatTotalPrice);
 
         txtTongTien.setText("Tổng tiền: " + formatted + "đ");
     }

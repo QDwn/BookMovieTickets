@@ -36,6 +36,7 @@ public class DatVe_Activity extends AppCompatActivity {
     private String selectedDate = "";
     private String selectedLocation = "Cầu Giấy";
     private String selectedTime = "";
+    private String movieTitle; // Thêm biến để lưu tên phim
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,7 @@ public class DatVe_Activity extends AppCompatActivity {
                 String imageUrl = snapshot.child("poster").getValue(String.class);
                 txtTitle.setText(title);
                 Glide.with(DatVe_Activity.this).load(imageUrl).into(posterImage);
+                movieTitle = title; // Lưu tên phim vào biến movieTitle
             }
 
             @Override
@@ -166,8 +168,14 @@ public class DatVe_Activity extends AppCompatActivity {
                 Toast.makeText(this, "Vui lòng chọn giờ chiếu trước khi tiếp tục", Toast.LENGTH_SHORT).show();
                 return;
             }
+            if (movieTitle == null || movieTitle.isEmpty()) {
+                Toast.makeText(this, "Thông tin phim chưa được tải đầy đủ. Vui lòng thử lại.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             Intent intent = new Intent(this, DatGhe_Activity.class);
             intent.putExtra("movieId", movieId);
+            intent.putExtra("movieTitle", movieTitle);
             intent.putExtra("ngay", selectedDate);
             intent.putExtra("diaDiem", selectedLocation);
             intent.putExtra("gio", selectedTime);
