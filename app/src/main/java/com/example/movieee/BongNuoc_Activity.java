@@ -35,6 +35,11 @@ public class BongNuoc_Activity extends AppCompatActivity implements ComboAdapter
     private ComboAdapter comboAdapter;
     private List<ComboBN> comboList = new ArrayList<>();
 
+    private String movieId, ngay, diaDiem, gio;
+    private String movieTitle; // Thêm biến để nhận tên phim
+    private ArrayList<String> selectedSeats;
+    private int seatTotalPrice; // Để lưu tổng giá tiền ghế
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,15 +49,42 @@ public class BongNuoc_Activity extends AppCompatActivity implements ComboAdapter
         txtTongTien = findViewById(R.id.txt_tong_tien);
         btnThanhToan = findViewById(R.id.btn_thanh_toan);
 
+        // Lấy dữ liệu được truyền từ DatGhe_Activity
+        Intent intent = getIntent();
+        if (intent != null) {
+            movieId = intent.getStringExtra("movieId");
+            movieTitle = intent.getStringExtra("movieTitle"); // Nhận tên phim
+            ngay = intent.getStringExtra("ngay");
+            diaDiem = intent.getStringExtra("diaDiem");
+            gio = intent.getStringExtra("gio");
+            selectedSeats = intent.getStringArrayListExtra("selectedSeats");
+            seatTotalPrice = intent.getIntExtra("seatTotalPrice", 0);
+        }
+
         comboAdapter = new ComboAdapter(comboList, this, this);
         recyclerCombo.setLayoutManager(new LinearLayoutManager(this));
         recyclerCombo.setAdapter(comboAdapter);
 
         loadCombosFromFirebase();
+        updateTotalPrice();
 
         btnThanhToan.setOnClickListener(v -> {
-            Intent intent = new Intent(this, ThanhToan_Activity.class);
-            startActivity(intent);
+            Intent paymentIntent = new Intent(this, ThanhToan_Activity.class);
+            paymentIntent.putExtra("movieId", movieId);
+            paymentIntent.putExtra("movieTitle", movieTitle); // Truyền tên phim
+            paymentIntent.putExtra("ngay", ngay);
+            paymentIntent.putExtra("diaDiem", diaDiem);
+            paymentIntent.putExtra("gio", gio);
+            paymentIntent.putStringArrayListExtra("selectedSeats", selectedSeats);
+
+            int comboTotalPrice = 0;
+            for (ComboBN c : comboList) {
+                comboTotalPrice += c.getPrice() * c.getQuantity();
+            }
+            paymentIntent.putExtra("comboTotalPrice", comboTotalPrice);
+            paymentIntent.putExtra("seatTotalPrice", seatTotalPrice);
+
+            startActivity(paymentIntent);
         });
     }
 
@@ -68,6 +100,7 @@ public class BongNuoc_Activity extends AppCompatActivity implements ComboAdapter
                     }
                 }
                 comboAdapter.notifyDataSetChanged();
+                updateTotalPrice();
             }
 
             @Override
@@ -79,11 +112,17 @@ public class BongNuoc_Activity extends AppCompatActivity implements ComboAdapter
 
     @Override
     public void onQuantityChanged() {
-        int tong = 0;
+        updateTotalPrice();
+    }
+
+    private void updateTotalPrice() {
+        int comboTotal = 0;
         for (ComboBN c : comboList) {
-            tong += c.getPrice() * c.getQuantity();
+            comboTotal += c.getPrice() * c.getQuantity();
         }
-        String formatted = NumberFormat.getInstance(new Locale("vi", "VN")).format(tong);
+        int total = seatTotalPrice + comboTotal;
+
+        String formatted = NumberFormat.getInstance(new Locale("vi", "VN")).format(total);
         txtTongTien.setText("Tổng tiền: " + formatted + "đ");
     }
 }

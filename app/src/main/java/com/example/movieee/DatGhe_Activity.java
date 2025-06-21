@@ -38,6 +38,9 @@ public class DatGhe_Activity extends AppCompatActivity implements SeatAdapter.On
     private List<Seat> seatList = new ArrayList<>();
     private SeatAdapter seatAdapter;
 
+    // Biến để lưu tổng tiền ghế
+    private int currentSeatTotalPrice = 0; // Thêm biến này
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +80,7 @@ public class DatGhe_Activity extends AppCompatActivity implements SeatAdapter.On
             intent.putExtra("diaDiem", diaDiem);
             intent.putExtra("gio", gio);
             intent.putStringArrayListExtra("selectedSeats", new ArrayList<>(selectedSeats));
+            intent.putExtra("seatTotalPrice", currentSeatTotalPrice); // Truyền tổng tiền ghế đã chọn
             startActivity(intent);
         });
     }
@@ -133,10 +137,10 @@ public class DatGhe_Activity extends AppCompatActivity implements SeatAdapter.On
     @Override
     public void onSeatSelected(List<String> selectedSeats) {
         txtGheDaChon.setText("Ghế đã chọn: " + String.join(", ", selectedSeats));
-        int tongTien = selectedSeats.size() * GIA_GHE;
+        currentSeatTotalPrice = selectedSeats.size() * GIA_GHE; // Cập nhật biến này
 
         NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
-        String formatted = formatter.format(tongTien);
+        String formatted = formatter.format(currentSeatTotalPrice);
 
         txtTongTien.setText("Tổng tiền: " + formatted + "đ");
     }
