@@ -1,10 +1,12 @@
 package com.example.movieee;
 
 import android.content.Intent;
+import android.content.SharedPreferences; // Đã thêm import SharedPreferences
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox; // Đã thêm import CheckBox
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,10 +42,17 @@ public class LoginActivity extends AppCompatActivity {
     EditText loginEmail, loginPassWord;
     Button loginButton;
     TextView signupRedirectText, forgotPasswordText;
-    ImageView imageViewGoogle, imageViewFacebook, imageViewInstagram; // Giữ lại ImageView cho FB/IG để tương ứng với layout
+    ImageView imageViewGoogle, imageViewFacebook, imageViewInstagram;
+    CheckBox rememberMeCheckbox; // Khai báo CheckBox
 
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
+
+    private static final String PREFS_NAME = "MyLoginPrefs";
+    private static final String PREF_USERNAME = "username";
+    private static final String PREF_PASSWORD = "password";
+    private static final String PREF_REMEMBER_ME = "rememberMe";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +67,9 @@ public class LoginActivity extends AppCompatActivity {
         signupRedirectText = findViewById(R.id.textsignup);
         forgotPasswordText = findViewById(R.id.textForgotPassword);
         imageViewGoogle = findViewById(R.id.imageViewGoogle);
-        imageViewFacebook = findViewById(R.id.imageViewFacebook); // Ánh xạ ID
-        imageViewInstagram = findViewById(R.id.imageViewInstagram); // Ánh xạ ID
+        imageViewFacebook = findViewById(R.id.imageViewFacebook);
+        imageViewInstagram = findViewById(R.id.imageViewInstagram);
+        rememberMeCheckbox = findViewById(R.id.checkBox2);
 
         // Cấu hình Google Sign-In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -68,6 +78,8 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+        // Tải thông tin đăng nhập đã lưu (nếu có)
+        loadSavedLoginDetails();
 
         // Listener cho nút Đăng nhập truyền thống
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -206,15 +218,44 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    // Phương thức để tải thông tin đăng nhập đã lưu
+    private void loadSavedLoginDetails() {
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean rememberMe = preferences.getBoolean(PREF_REMEMBER_ME, false);
+        if (rememberMe) {
+            String username = preferences.getString(PREF_USERNAME, "");
+            String password = preferences.getString(PREF_PASSWORD, "");
+            loginEmail.setText(username);
+            loginPassWord.setText(password);
+            rememberMeCheckbox.setChecked(true);
+        }
+    }
+
+    // Phương thức để lưu thông tin đăng nhập
+    private void saveLoginDetails(String username, String password, boolean rememberMe) {
+        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+        if (rememberMe) {
+            editor.putString(PREF_USERNAME, username);
+            editor.putString(PREF_PASSWORD, password);
+            editor.putBoolean(PREF_REMEMBER_ME, true);
+        } else {
+            // Xóa thông tin đã lưu nếu người dùng bỏ chọn "Remember Me"
+            editor.remove(PREF_USERNAME);
+            editor.remove(PREF_PASSWORD);
+            editor.putBoolean(PREF_REMEMBER_ME, false); // Vẫn lưu trạng thái checkbox
+        }
+        editor.apply(); // Lưu thay đổi bất đồng bộ
+    }
+
     // Phương thức checkUser đã được sửa đổi
     public void checkUser() {
-        String userEmail = loginEmail.getText().toString().trim(); // Đổi tên biến để rõ ràng hơn
+        String userEmail = loginEmail.getText().toString().trim();
         String userPassword = loginPassWord.getText().toString().trim();
+        boolean rememberMe = rememberMeCheckbox.isChecked(); // Lấy trạng thái checkbox
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
         // Truy vấn dựa trên trường 'email' bên trong các node con
         Query checkUserDatabase = reference.orderByChild("email").equalTo(userEmail);
-
         checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -222,23 +263,41 @@ public class LoginActivity extends AppCompatActivity {
                     loginEmail.setError(null);
                     // Duyệt qua các kết quả (thường chỉ có 1 nếu email là duy nhất)
                     for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                        HelperClass user = userSnapshot.getValue(HelperClass.class); // Lấy đối tượng HelperClass
+                        HelperClass user = userSnapshot.getValue(HelperClass.class); // Lấy đối tượng HelperClass [cite: uploaded:qdwn/bookmovietickets/QDwn-BookMovieTickets-6c8cc18/app/src/main/java/com/example/movieee/LoginActivity.java]
                         if (user != null) {
                             String passwordFromDB = user.getPassword();
 
                             if (passwordFromDB != null && passwordFromDB.equals(userPassword)) {
                                 loginPassWord.setError(null);
-                                // Kiểm tra vai trò của người dùng
-                                String role = user.getRole();
-                                if (role != null && role.equals("admin")) {
-                                    Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
-                                    startActivity(intent);
-                                } else {
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity2.class); // Chuyển đến MainActivity2 cho người dùng thông thường
-                                    startActivity(intent);
-                                }
-                                finish();
-                                return; // Đã tìm thấy người dùng và xử lý, thoát khỏi vòng lặp
+                                // Đăng nhập người dùng vào Firebase Authentication SAU KHI xác minh trong Realtime Database
+                                mAuth.signInWithEmailAndPassword(userEmail, userPassword)
+                                        .addOnCompleteListener(LoginActivity.this, task -> {
+                                            if (task.isSuccessful()) {
+                                                // Đăng nhập Firebase Auth thành công
+                                                // Lưu thông tin đăng nhập nếu "Remember Me" được chọn
+                                                saveLoginDetails(userEmail, userPassword, rememberMe);
+
+                                                String role = user.getRole();
+
+                                                if (role != null && role.equals("admin")) {
+                                                    Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
+                                                    startActivity(intent);
+                                                } else {
+                                                    Intent intent = new Intent(LoginActivity.this, MainActivity2.class);
+                                                    startActivity(intent);
+                                                }
+                                                finish();
+                                            } else {
+                                                // Đăng nhập Firebase Auth thất bại. Có thể tài khoản chưa được tạo trong Authentication.
+                                                // Bạn nên đảm bảo tài khoản được tạo trong Firebase Authentication khi đăng ký.
+                                                Toast.makeText(LoginActivity.this, "Đăng nhập Firebase Auth thất bại: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                // Tùy chọn: vẫn cho phép vào nếu Realtime DB ok, nhưng không lý tưởng
+                                                // Nếu bạn muốn người dùng vẫn vào được ứng dụng ngay cả khi Authentication thất bại (nhưng DB OK),
+                                                // hãy di chuyển phần Intent bên dưới ra ngoài khối else này.
+                                                // Tuy nhiên, tốt nhất là nên đồng bộ Firebase Auth và Realtime DB.
+                                            }
+                                        });
+                                return;
                             }
                         }
                     }

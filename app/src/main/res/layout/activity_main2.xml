@@ -8,7 +8,6 @@
     tools:context=".MainActivity2"
     android:background="@color/black"
     >
-    <!-- Thêm Notification Panel ở đây -->
     <RelativeLayout
         android:id="@+id/notification_panel"
         android:layout_width="300dp"
@@ -20,7 +19,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Nội dung panel thông báo -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -52,7 +50,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!-- Các thông báo sẽ được thêm vào đây -->
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>
@@ -68,7 +65,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Thanh Toolbar tùy chỉnh -->
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -79,7 +75,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <!-- Logo và tên app -->
                     <LinearLayout
                         android:id="@+id/logo_container"
                         android:layout_width="wrap_content"
@@ -106,7 +101,6 @@
                             android:textStyle="bold" />
                     </LinearLayout>
 
-                    <!-- Nút chuông -->
                     <ImageButton
                         android:id="@+id/bell_icon"
                         android:layout_width="40dp"
@@ -199,28 +193,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="1000dp"
                 android:orientation="vertical">
-            <TextView
-                android:id="@+id/txt_danh_sach_theo_danh_gia"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Ranking"
-                android:textColor="@color/white"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                android:paddingStart="10dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp" />
+                <TextView
+                    android:id="@+id/txt_danh_sach_theo_danh_gia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ranking"
+                    android:textColor="@color/white"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    android:paddingStart="10dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="8dp" />
 
-            <!-- Ranking Vertical List -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:nestedScrollingEnabled="false"
-                android:clipToPadding="false"
-                android:overScrollMode="never"
-                android:scrollbars="none" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:nestedScrollingEnabled="false"
+                    android:clipToPadding="false"
+                    android:overScrollMode="never"
+                    android:scrollbars="none" />
             </LinearLayout>
             <TextView
                 android:id="@+id/textView10"
@@ -240,7 +233,6 @@
                 android:padding="12dp"
                 android:gravity="center">
 
-                <!-- ITEM 1 -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -265,7 +257,6 @@
                         android:layout_marginTop="6dp"/>
                 </LinearLayout>
 
-                <!-- ITEM 2 -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -290,7 +281,6 @@
                         android:layout_marginTop="6dp"/>
                 </LinearLayout>
 
-                <!-- ITEM 3 -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -315,7 +305,6 @@
                         android:layout_marginTop="6dp"/>
                 </LinearLayout>
 
-                <!-- ITEM 4 -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -370,7 +359,6 @@
                 android:gravity="center"
                 android:weightSum="4">
 
-                <!-- Home -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -379,26 +367,23 @@
                     android:gravity="center"
                     android:clickable="true"
                     android:focusable="true"
-                    android:foreground="?attr/selectableItemBackgroundBorderless"
-                    android:onClick="onMenuButtonClick">
+                    android:foreground="?attr/selectableItemBackgroundBorderless">
 
                     <ImageButton
                         android:id="@+id/btn_home"
                         style="@style/BottomMenuButton"
                         android:src="@drawable/home"
                         android:contentDescription="Home"
-                        android:clickable="true"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Home"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        android:layout_marginTop="2dp"/>
+                        android:clickable="true"
+                        android:onClick="onMenuButtonClick"/> <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Home"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:layout_marginTop="2dp"/>
                 </LinearLayout>
 
-                <!-- Ticket -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -407,25 +392,22 @@
                     android:gravity="center"
                     android:clickable="true"
                     android:focusable="true"
-                    android:foreground="?attr/selectableItemBackgroundBorderless"
-                    android:onClick="onMenuButtonClick">
+                    android:foreground="?attr/selectableItemBackgroundBorderless">
 
                     <ImageButton
                         android:id="@+id/btn_ticket"
                         style="@style/BottomMenuButton"
                         android:src="@drawable/ticket"
-                        android:contentDescription="Ticket"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Ticket"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        android:layout_marginTop="2dp"/>
+                        android:contentDescription="Ticket"
+                        android:onClick="onMenuButtonClick"/> <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ticket"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:layout_marginTop="2dp"/>
                 </LinearLayout>
 
-                <!-- Movie -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -434,25 +416,22 @@
                     android:gravity="center"
                     android:clickable="true"
                     android:focusable="true"
-                    android:foreground="?attr/selectableItemBackgroundBorderless"
-                    android:onClick="onMenuButtonClick">
+                    android:foreground="?attr/selectableItemBackgroundBorderless">
 
                     <ImageButton
                         android:id="@+id/btn_movie"
                         style="@style/BottomMenuButton"
                         android:src="@drawable/movie"
-                        android:contentDescription="Movie"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Movie"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        android:layout_marginTop="2dp"/>
+                        android:contentDescription="Movie"
+                        android:onClick="onMenuButtonClick"/> <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Movie"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:layout_marginTop="2dp"/>
                 </LinearLayout>
 
-                <!-- Account -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -461,22 +440,20 @@
                     android:gravity="center"
                     android:clickable="true"
                     android:focusable="true"
-                    android:foreground="?attr/selectableItemBackgroundBorderless"
-                    android:onClick="onMenuButtonClick">
+                    android:foreground="?attr/selectableItemBackgroundBorderless">
 
                     <ImageButton
                         android:id="@+id/btn_account"
                         style="@style/BottomMenuButton"
                         android:src="@drawable/profile"
-                        android:contentDescription="Account"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Account"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        android:layout_marginTop="2dp"/>
+                        android:contentDescription="Account"
+                        android:onClick="onMenuButtonClick"/> <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Account"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:layout_marginTop="2dp"/>
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.bottomappbar.BottomAppBar>

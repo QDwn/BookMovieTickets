@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +30,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.auth.FirebaseAuth; // Thêm import cho FirebaseAuth
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -42,6 +44,9 @@ public class MainActivity2 extends AppCompatActivity {
     private boolean isPanelShown = false;
 
     List<Movie> nowPlayingMovies;
+
+    // Khai báo FirebaseAuth
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +71,11 @@ public class MainActivity2 extends AppCompatActivity {
         ImageButton bellButton = findViewById(R.id.bell_icon);
         bellButton.setOnClickListener(v -> toggleNotificationPanel());
 
+        // Khởi tạo FirebaseAuth
+        mAuth = FirebaseAuth.getInstance();
+
         loadMoviesFromFirebase();
-        loadVerticalMoviesFromFirebase();  // Dữ liệu vertical
+        loadVerticalMoviesFromFirebase();
     }
 
     private void toggleNotificationPanel() {
@@ -99,7 +107,41 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     public void onMenuButtonClick(View view) {
-        // Optional: xử lý menu
+        int id = view.getId();
+        if (id == R.id.btn_account) { // Kiểm tra xem nút được nhấp có phải là nút tài khoản không
+            // Lấy email của người dùng hiện tại
+            String currentLoggedInUserEmail = null;
+            if (mAuth.getCurrentUser() != null) {
+                currentLoggedInUserEmail = mAuth.getCurrentUser().getEmail();
+            }
+
+            // --- Bắt đầu phần thêm Logcat và Toast ---
+            Log.d("AccountDebug", "Giá trị email khi nhấn Account: " + currentLoggedInUserEmail);
+            Toast.makeText(this, "Email kiểm tra: " + (currentLoggedInUserEmail != null ? currentLoggedInUserEmail : "NULL"), Toast.LENGTH_SHORT).show();
+            // --- Kết thúc phần thêm Logcat và Toast ---
+
+            if (currentLoggedInUserEmail != null) {
+                Intent intent = new Intent(MainActivity2.this, AccountDetailsActivity.class); // Khởi chạy AccountDetailsActivity
+                intent.putExtra("userEmail", currentLoggedInUserEmail); // Truyền email của người dùng
+                startActivity(intent);
+            } else {
+                // Nếu không có người dùng nào đăng nhập, có thể chuyển hướng đến màn hình đăng nhập
+                Toast.makeText(this, "Bạn chưa đăng nhập. Vui lòng đăng nhập để xem chi tiết tài khoản.", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(MainActivity2.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        } else if (id == R.id.btn_home) { // Ví dụ cho nút Home
+            // Hiện tại đã ở Home (MainActivity2), không cần làm gì hoặc có thể refresh
+            Toast.makeText(this, "Bạn đang ở Trang chủ", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.btn_ticket) { // Ví dụ cho nút Ticket
+            // Xử lý chuyển hướng đến màn hình vé của người dùng
+            // Intent intent = new Intent(MainActivity2.this, TicketActivity.class);
+            // startActivity(intent);
+            Toast.makeText(this, "Chức năng Vé đang được phát triển", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.btn_movie) { // Ví dụ cho nút Movie
+            // Có thể chuyển hướng đến danh sách phim (nếu có màn hình riêng)
+            Toast.makeText(this, "Chức năng Phim đang được phát triển", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void loadMoviesFromFirebase() {
