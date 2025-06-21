@@ -228,16 +228,35 @@ public class LoginActivity extends AppCompatActivity {
 
                             if (passwordFromDB != null && passwordFromDB.equals(userPassword)) {
                                 loginPassWord.setError(null);
-                                // Kiểm tra vai trò của người dùng
-                                String role = user.getRole();
-                                if (role != null && role.equals("admin")) {
-                                    Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
-                                    startActivity(intent);
-                                } else {
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity2.class); // Chuyển đến MainActivity2 cho người dùng thông thường
-                                    startActivity(intent);
-                                }
-                                finish();
+                                // === BẮT ĐẦU THAY ĐỔI QUAN TRỌNG TẠI ĐÂY ===
+                                // Đăng nhập người dùng vào Firebase Authentication SAU KHI xác minh trong Realtime Database
+                                mAuth.signInWithEmailAndPassword(userEmail, userPassword)
+                                        .addOnCompleteListener(LoginActivity.this, task -> {
+                                            if (task.isSuccessful()) {
+                                                // Đăng nhập Firebase Auth thành công
+                                                FirebaseUser firebaseUser = mAuth.getCurrentUser(); // Lấy đối tượng FirebaseUser
+                                                String role = user.getRole(); // Lấy vai trò từ Realtime DB
+
+                                                if (role != null && role.equals("admin")) {
+                                                    Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
+                                                    startActivity(intent);
+                                                } else {
+                                                    // Chuyển đến MainActivity2 cho người dùng thông thường
+                                                    Intent intent = new Intent(LoginActivity.this, MainActivity2.class);
+                                                    startActivity(intent);
+                                                }
+                                                finish();
+                                            } else {
+                                                // Đăng nhập Firebase Auth thất bại. Có thể tài khoản chưa được tạo trong Authentication.
+                                                // Bạn nên đảm bảo tài khoản được tạo trong Firebase Authentication khi đăng ký.
+                                                Toast.makeText(LoginActivity.this, "Đăng nhập Firebase Auth thất bại: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                // Tùy chọn: vẫn cho phép vào nếu Realtime DB ok, nhưng không lý tưởng
+                                                // Nếu bạn muốn người dùng vẫn vào được ứng dụng ngay cả khi Authentication thất bại (nhưng DB OK),
+                                                // hãy di chuyển phần Intent bên dưới ra ngoài khối else này.
+                                                // Tuy nhiên, tốt nhất là nên đồng bộ Firebase Auth và Realtime DB.
+                                            }
+                                        });
+                                // === KẾT THÚC THAY ĐỔI QUAN TRỌNG ===
                                 return; // Đã tìm thấy người dùng và xử lý, thoát khỏi vòng lặp
                             }
                         }
