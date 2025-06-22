@@ -14,7 +14,7 @@
     </style>
     <style name="RoundedCorner" parent="">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">8dp</item> <!-- Điều chỉnh độ bo góc -->
+        <item name="cornerSize">8dp</item>
     </style>
 
 </resources>

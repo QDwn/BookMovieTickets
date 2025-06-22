@@ -500,12 +500,13 @@
                     <ImageButton
                         android:id="@+id/btn_movie"
                         style="@style/BottomMenuButton"
-                        android:src="@drawable/movie"
+                        android:src="@drawable/heart1"
                         android:contentDescription="Movie"
-                        android:onClick="onMenuButtonClick"/> <TextView
+                        android:onClick="onMenuButtonClick"/>
+                    <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Movie"
+                    android:text="Favorite"
                     android:textColor="@color/white"
                     android:textSize="12sp"
                     android:layout_marginTop="2dp"/>
