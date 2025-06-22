@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,20 +21,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.bumptech.glide.Glide;
 import com.example.movieee.Adapter.HomeMovieAdapter;
 import com.example.movieee.Adapter.NowPlayingAdapter;
 import com.example.movieee.Adapter.RankingAdapter;
 import com.example.movieee.Model.Movie;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.*;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class MainActivity2 extends AppCompatActivity {
     private ViewPager2 nowPlayingViewPager;
@@ -41,9 +36,10 @@ public class MainActivity2 extends AppCompatActivity {
     private RecyclerView verticalRecyclerView;
     private RelativeLayout notificationPanel;
     private boolean isPanelShown = false;
-    Button btnHanhDong, btnHoatHinh, btnChinhKich, btnPhieuLuu, btnKinhDi;
 
-    List<Movie> nowPlayingMovies;
+    private Button btnHanhDong, btnHoatHinh, btnChinhKich, btnPhieuLuu, btnKinhDi;
+    private FirebaseAuth mAuth;
+    private List<Movie> nowPlayingMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,14 +56,15 @@ public class MainActivity2 extends AppCompatActivity {
         nowPlayingViewPager = findViewById(R.id.now_playing_view_pager);
         bestMoviesRecyclerView = findViewById(R.id.view1);
         verticalRecyclerView = findViewById(R.id.recycler_vertical);
+        notificationPanel = findViewById(R.id.notification_panel);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        notificationPanel = findViewById(R.id.notification_panel);
 
         ImageButton bellButton = findViewById(R.id.bell_icon);
         bellButton.setOnClickListener(v -> toggleNotificationPanel());
 
+        // Init buttons
         btnHanhDong = findViewById(R.id.btnHanhDong);
         btnHoatHinh = findViewById(R.id.btnHoatHinh);
         btnChinhKich = findViewById(R.id.btnChinhKich);
@@ -80,8 +77,10 @@ public class MainActivity2 extends AppCompatActivity {
         btnPhieuLuu.setOnClickListener(v -> openTheLoai("Phiêu lưu"));
         btnKinhDi.setOnClickListener(v -> openTheLoai("Kinh dị"));
 
+        mAuth = FirebaseAuth.getInstance();
+
         loadMoviesFromFirebase();
-        loadVerticalMoviesFromFirebase();  // Dữ liệu vertical
+        loadVerticalMoviesFromFirebase();
     }
 
     private void toggleNotificationPanel() {
@@ -113,11 +112,37 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     public void onMenuButtonClick(View view) {
-        // Optional: xử lý menu
+        int id = view.getId();
+        if (id == R.id.btn_account) {
+            String currentLoggedInUserEmail = mAuth.getCurrentUser() != null ?
+                    mAuth.getCurrentUser().getEmail() : null;
+
+            Log.d("AccountDebug", "Email hiện tại: " + currentLoggedInUserEmail);
+            Toast.makeText(this, "Email: " + (currentLoggedInUserEmail != null ? currentLoggedInUserEmail : "NULL"), Toast.LENGTH_SHORT).show();
+
+            if (currentLoggedInUserEmail != null) {
+                Intent intent = new Intent(MainActivity2.this, AccountDetailsActivity.class);
+                intent.putExtra("userEmail", currentLoggedInUserEmail);
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, "Bạn chưa đăng nhập.", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(MainActivity2.this, LoginActivity.class));
+            }
+        } else if (id == R.id.btn_home) {
+            Toast.makeText(this, "Bạn đang ở Trang chủ", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.btn_ticket) {
+            if (mAuth.getCurrentUser() != null) {
+                startActivity(new Intent(MainActivity2.this, UserTicketsActivity.class));
+            } else {
+                Toast.makeText(this, "Bạn cần đăng nhập để xem vé đã đặt.", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity2.this, LoginActivity.class));
+            }
+        } else if (id == R.id.btn_movie) {
+            Toast.makeText(this, "Chức năng Phim đang được phát triển", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void loadMoviesFromFirebase() {
-        // Hardcoded Now Playing movies
         nowPlayingMovies = List.of(
                 new Movie("Movie 1", R.drawable.quydinh, "np_001"),
                 new Movie("Movie 2", R.drawable.rapphim, "np_002"),
@@ -134,7 +159,6 @@ public class MainActivity2 extends AppCompatActivity {
                     String movieId = movieSnapshot.getKey();
                     String title = movieSnapshot.child("ten_phim").getValue(String.class);
                     String imageUrl = movieSnapshot.child("poster").getValue(String.class);
-
                     if (title != null && imageUrl != null && movieId != null) {
                         bestMovieList.add(new Movie(title, imageUrl, movieId));
                     }
@@ -160,6 +184,7 @@ public class MainActivity2 extends AppCompatActivity {
                 for (DataSnapshot movieSnapshot : snapshot.getChildren()) {
                     String movieId = movieSnapshot.getKey();
                     if (movieId == null || !movieId.matches("id_phim(1[1-9]|[2-9][0-9]|[1-9][0-9]{2,})")) continue;
+
                     String title = movieSnapshot.child("ten_phim").getValue(String.class);
                     String poster = movieSnapshot.child("imageUrl").getValue(String.class);
                     String duration = movieSnapshot.child("thoi_luong").getValue(String.class);
@@ -171,11 +196,10 @@ public class MainActivity2 extends AppCompatActivity {
                     verticalList.add(movie);
                 }
 
-                // Sắp xếp theo đánh giá giảm dần
                 verticalList.sort(Comparator.comparing((Movie m) -> m.getRating() != null ? m.getRating() : 0.0).reversed());
 
                 RankingAdapter adapter = new RankingAdapter(verticalList, MainActivity2.this);
-                verticalRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity2.this, LinearLayoutManager.VERTICAL, false));
+                verticalRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity2.this));
                 verticalRecyclerView.setAdapter(adapter);
             }
 
@@ -196,6 +220,7 @@ public class MainActivity2 extends AppCompatActivity {
         bestMoviesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         bestMoviesRecyclerView.setAdapter(adapter);
     }
+
     private void openTheLoai(String theLoai) {
         Intent intent = new Intent(MainActivity2.this, TheLoai_Activity.class);
         intent.putExtra("genre", theLoai);
