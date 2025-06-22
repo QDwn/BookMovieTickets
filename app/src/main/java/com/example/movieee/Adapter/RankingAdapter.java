@@ -58,6 +58,13 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.MovieVie
         return movieList.size();
     }
 
+    // Phương thức mới để cập nhật danh sách phim
+    public void updateList(List<Movie> newList) {
+        movieList.clear();
+        movieList.addAll(newList);
+        notifyDataSetChanged();
+    }
+
     public static class MovieViewHolder extends RecyclerView.ViewHolder {
         ImageView poster;
         TextView title, rating, duration;
@@ -71,4 +78,3 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.MovieVie
         }
     }
 }
-

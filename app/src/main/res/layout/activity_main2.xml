@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity2"
-    android:background="@color/black"
-    >
+    android:background="@color/black">
+
     <RelativeLayout
         android:id="@+id/notification_panel"
         android:layout_width="300dp"
@@ -53,352 +53,386 @@
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>
-    <ScrollView
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-67dp">
+        android:layout_height="49dp"
+        android:elevation="4dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
+            <LinearLayout
+                android:id="@+id/logo_container"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="12dp">
+
+                <ImageView
+                    android:id="@+id/app_logo"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/movie" />
+
+                <TextView
+                    android:id="@+id/app_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Movie App"
+                    android:textColor="@color/white"
+                    android:textSize="25dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/bell_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/notifications"
+                android:contentDescription="Thông báo" />
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <EditText
+        android:id="@+id/editTextText"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/edittext_background"
+        android:drawableEnd="@drawable/search"
+        android:drawablePadding="8dp"
+        android:ems="10"
+        android:hint="Search Movie..."
+        android:inputType="text"
+        android:padding="12dp"
+        android:textColorHint="@color/black"
+        android:textSize="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ScrollView
+            android:id="@+id/mainScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="-67dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="49dp"
-                android:elevation="4dp">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <RelativeLayout
+                <TextView
+                    android:id="@+id/textView9"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:text="About Us"
+                    android:textColor="@color/white"
+                    android:textSize="25dp"
+                    android:textStyle="bold"
+                    android:paddingLeft="10dp"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/nowPlayingContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp">
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/now_playing_view_pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingBottom="16dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Now Playing"
+                    android:textColor="@color/white"
+                    android:textSize="25dp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:paddingLeft="10dp"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bestMoviesContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/view1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:clipToPadding="false"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <LinearLayout
+                    android:id="@+id/rankingContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/txt_danh_sach_theo_danh_gia"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Ranking"
+                        android:textColor="@color/white"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        android:paddingStart="10dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="8dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="12dp"
+                        android:nestedScrollingEnabled="false"
+                        android:clipToPadding="false"
+                        android:overScrollMode="never"
+                        android:scrollbars="none" />
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="Service"
+                    android:textColor="@color/white"
+                    android:textSize="25dp"
+                    android:textStyle="bold"
+                    android:paddingLeft="10dp"/>
+                <LinearLayout
+                    android:id="@+id/serviceContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="12dp"
+                    android:gravity="center">
 
                     <LinearLayout
-                        android:id="@+id/logo_container"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentStart="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingStart="12dp">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="20dp"
+                        android:gravity="center_horizontal">
 
-                        <ImageView
-                            android:id="@+id/app_logo"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@drawable/movie" />
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/single"
+                            app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
 
                         <TextView
-                            android:id="@+id/app_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:text="Movie App"
+                            android:text="Single"
+                            android:textStyle="bold"
+                            android:textSize="20sp"
                             android:textColor="@color/white"
-                            android:textSize="25dp"
-                            android:textStyle="bold" />
+                            android:layout_marginTop="6dp"/>
                     </LinearLayout>
 
-                    <ImageButton
-                        android:id="@+id/bell_icon"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="16dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:src="@drawable/notifications"
-                        android:contentDescription="Thông báo" />
-                </RelativeLayout>
-            </androidx.appcompat.widget.Toolbar>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="20dp"
+                        android:gravity="center_horizontal">
 
-            <EditText
-                android:id="@+id/editTextText"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_margin="16dp"
-                android:background="@drawable/edittext_background"
-                android:drawableEnd="@drawable/search"
-                android:drawablePadding="8dp"
-                android:ems="10"
-                android:hint="Search Movie..."
-                android:inputType="text"
-                android:padding="12dp"
-                android:textColorHint="@color/black"
-                android:textSize="20dp" />
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/sweetbox"
+                            app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
 
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="About Us"
-                android:textColor="@color/white"
-                android:textSize="25dp"
-                android:textStyle="bold"
-                android:paddingLeft="10dp"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Sweetbox"
+                            android:textStyle="bold"
+                            android:textSize="20sp"
+                            android:textColor="@color/white"
+                            android:layout_marginTop="6dp"/>
+                    </LinearLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="250dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="20dp"
+                        android:gravity="center_horizontal">
 
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/now_playing_view_pager"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingBottom="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/imax"
+                            app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="IMAX"
+                            android:textStyle="bold"
+                            android:textSize="20sp"
+                            android:textColor="@color/white"
+                            android:layout_marginTop="6dp"/>
+                    </LinearLayout>
 
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Now Playing"
-                android:textColor="@color/white"
-                android:textSize="25dp"
-                android:textStyle="bold"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:paddingLeft="10dp"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="10dp"
+                        android:gravity="center_horizontal">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="300dp">
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/screenx"
+                            app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/view1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
-                    android:clipToPadding="false"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="4DX"
+                            android:textSize="20sp"
+                            android:textColor="@color/white"
+                            android:textStyle="bold"
+                            android:layout_marginTop="6dp"/>
+                    </LinearLayout>
 
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="1000dp"
-                android:orientation="vertical">
+                </LinearLayout>
                 <TextView
-                    android:id="@+id/txt_danh_sach_theo_danh_gia"
+                    android:id="@+id/aaa"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Ranking"
-                    android:textColor="@color/white"
-                    android:textSize="25sp"
+                    android:textSize="25dp"
                     android:textStyle="bold"
-                    android:paddingStart="10dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="8dp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_vertical"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="30dp"
+                    android:textColor="@color/white"
+                    android:paddingLeft="10dp"
+                    android:text="Categories"/>
+                <LinearLayout
+                    android:id="@+id/categoriesContainer"
+                    android:orientation="vertical"
+                    android:padding="24dp"
+                    android:gravity="center"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="12dp"
-                    android:nestedScrollingEnabled="false"
-                    android:clipToPadding="false"
-                    android:overScrollMode="never"
-                    android:scrollbars="none" />
-            </LinearLayout>
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:text="Service"
-                android:textColor="@color/white"
-                android:textSize="25dp"
-                android:textStyle="bold"
-                android:paddingLeft="10dp"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp"
-                android:gravity="center">
+                    android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginEnd="20dp"
-                    android:gravity="center_horizontal">
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/single"
-                        app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <Button
+                        android:id="@+id/btnHanhDong"
+                        android:layout_width="200dp"
                         android:layout_height="wrap_content"
-                        android:text="Single"
-                        android:textStyle="bold"
-                        android:textSize="20sp"
-                        android:textColor="@color/white"
-                        android:layout_marginTop="6dp"/>
-                </LinearLayout>
+                        android:text="Hành động"
+                        android:backgroundTint="@color/red"
+                        android:layout_marginBottom="16dp" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginEnd="20dp"
-                    android:gravity="center_horizontal">
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/sweetbox"
-                        app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <Button
+                        android:id="@+id/btnHoatHinh"
+                        android:layout_width="200dp"
                         android:layout_height="wrap_content"
-                        android:text="Sweetbox"
-                        android:textStyle="bold"
-                        android:textSize="20sp"
-                        android:textColor="@color/white"
-                        android:layout_marginTop="6dp"/>
-                </LinearLayout>
+                        android:text="Hoạt hình"
+                        android:backgroundTint="@color/red"
+                        android:layout_marginBottom="16dp" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginEnd="20dp"
-                    android:gravity="center_horizontal">
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/imax"
-                        app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <Button
+                        android:id="@+id/btnChinhKich"
+                        android:layout_width="200dp"
                         android:layout_height="wrap_content"
-                        android:text="IMAX"
-                        android:textStyle="bold"
-                        android:textSize="20sp"
-                        android:textColor="@color/white"
-                        android:layout_marginTop="6dp"/>
-                </LinearLayout>
+                        android:text="Chính kịch"
+                        android:backgroundTint="@color/red"
+                        android:layout_marginBottom="16dp" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginEnd="10dp"
-                    android:gravity="center_horizontal">
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/screenx"
-                        app:shapeAppearanceOverlay="@style/RoundedCornerImage" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <Button
+                        android:id="@+id/btnPhieuLuu"
+                        android:layout_width="200dp"
                         android:layout_height="wrap_content"
-                        android:text="4DX"
-                        android:textSize="20sp"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"
-                        android:layout_marginTop="6dp"/>
+                        android:text="Phiêu lưu"
+                        android:backgroundTint="@color/red"
+                        android:layout_marginBottom="16dp" />
+
+                    <Button
+                        android:id="@+id/btnKinhDi"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/red"
+                        android:text="Kinh dị" />
+
                 </LinearLayout>
 
             </LinearLayout>
-            <TextView
-                android:id="@+id/aaa"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="25dp"
-                android:textStyle="bold"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="30dp"
-                android:textColor="@color/white"
-                android:paddingLeft="10dp"
-                android:text="Categories"/>
-            <LinearLayout
-                android:orientation="vertical"
-                android:padding="24dp"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
-                <Button
-                    android:id="@+id/btnHanhDong"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:text="Hành động"
-                    android:backgroundTint="@color/red"
-                    android:layout_marginBottom="16dp" />
+        </ScrollView>
 
-                <Button
-                    android:id="@+id/btnHoatHinh"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:text="Hoạt hình"
-                    android:backgroundTint="@color/red"
-                    android:layout_marginBottom="16dp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewSearchResults"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/gray" android:visibility="gone"
+            android:elevation="4dp"
+            android:nestedScrollingEnabled="false"
+            android:overScrollMode="never" />
 
-                <Button
-                    android:id="@+id/btnChinhKich"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:text="Chính kịch"
-                    android:backgroundTint="@color/red"
-                    android:layout_marginBottom="16dp" />
+    </FrameLayout>
 
-                <Button
-                    android:id="@+id/btnPhieuLuu"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:text="Phiêu lưu"
-                    android:backgroundTint="@color/red"
-                    android:layout_marginBottom="16dp" />
-
-                <Button
-                    android:id="@+id/btnKinhDi"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/red"
-                    android:text="Kinh dị" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </ScrollView>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/bottom_nav_container"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:layout_width="match_parent"

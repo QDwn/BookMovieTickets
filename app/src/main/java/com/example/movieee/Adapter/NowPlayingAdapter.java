@@ -42,7 +42,11 @@ public class NowPlayingAdapter extends RecyclerView.Adapter<NowPlayingAdapter.No
                 .placeholder(R.drawable.placeholder_poster)
                 .into(holder.moviePoster);
 
-        holder.movieTitle.setText(movie.getTitle()); // Thêm dòng này để đặt tiêu đề phim
+        // Sử dụng ID chung mới cho TextView tiêu đề phim
+        if (holder.movieTitle != null) { // Thêm kiểm tra null để an toàn, mặc dù với layout này sẽ luôn có
+            holder.movieTitle.setText(movie.getTitle()); // Đây là dòng 45 gây lỗi trước đó
+        }
+
 
         holder.moviePoster.setOnClickListener(v -> {
             Intent intent = new Intent(context, ChitietMovie_Activity.class);
@@ -63,7 +67,8 @@ public class NowPlayingAdapter extends RecyclerView.Adapter<NowPlayingAdapter.No
         public NowPlayingViewHolder(@NonNull View itemView) {
             super(itemView);
             moviePoster = itemView.findViewById(R.id.movie_poster);
-            movieTitle = itemView.findViewById(R.id.movie_title); // Khởi tạo TextView movieTitle
+            // Cập nhật để sử dụng ID chung mới
+            movieTitle = itemView.findViewById(R.id.tv_movie_title_common); // ĐÃ THAY ĐỔI ID NÀY
         }
     }
 }

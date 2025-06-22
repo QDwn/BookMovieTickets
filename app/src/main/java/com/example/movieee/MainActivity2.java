@@ -1,13 +1,19 @@
 package com.example.movieee;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout; // Thêm import này
 import android.widget.RelativeLayout;
+import android.widget.TextView; // Thêm import này
 import android.widget.Toast;
 import android.util.Log;
 
@@ -29,6 +35,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MainActivity2 extends AppCompatActivity {
     private ViewPager2 nowPlayingViewPager;
@@ -40,6 +47,27 @@ public class MainActivity2 extends AppCompatActivity {
     private Button btnHanhDong, btnHoatHinh, btnChinhKich, btnPhieuLuu, btnKinhDi;
     private FirebaseAuth mAuth;
     private List<Movie> nowPlayingMovies;
+    private EditText searchEditText;
+
+    private List<Movie> allMovies;
+    private HomeMovieAdapter bestMoviesAdapter;
+    private RankingAdapter rankingAdapter;
+
+
+    private RecyclerView recyclerViewSearchResults;
+    private HomeMovieAdapter searchResultsAdapter;
+
+    private androidx.constraintlayout.widget.ConstraintLayout nowPlayingContainer;
+    private androidx.constraintlayout.widget.ConstraintLayout bestMoviesContainer;
+    private LinearLayout rankingContainer;
+    private TextView textView7;
+    private TextView txt_danh_sach_theo_danh_gia;
+    private TextView textView9;
+    private TextView textView10;
+    private LinearLayout serviceContainer;
+    private TextView aaa;
+    private LinearLayout categoriesContainer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +85,20 @@ public class MainActivity2 extends AppCompatActivity {
         bestMoviesRecyclerView = findViewById(R.id.view1);
         verticalRecyclerView = findViewById(R.id.recycler_vertical);
         notificationPanel = findViewById(R.id.notification_panel);
+        searchEditText = findViewById(R.id.editTextText);
+
+
+        nowPlayingContainer = findViewById(R.id.nowPlayingContainer);
+        bestMoviesContainer = findViewById(R.id.bestMoviesContainer);
+        rankingContainer = findViewById(R.id.rankingContainer);
+        textView7 = findViewById(R.id.textView7);
+        txt_danh_sach_theo_danh_gia = findViewById(R.id.txt_danh_sach_theo_danh_gia);
+        textView9 = findViewById(R.id.textView9);
+        textView10 = findViewById(R.id.textView10);
+        serviceContainer = findViewById(R.id.serviceContainer);
+        aaa = findViewById(R.id.aaa);
+        categoriesContainer = findViewById(R.id.categoriesContainer);
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -79,10 +121,47 @@ public class MainActivity2 extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        allMovies = new ArrayList<>();
+
+        nowPlayingMovies = new ArrayList<>();
+        setupNowPlayingViewPager(nowPlayingMovies);
+
+        bestMoviesAdapter = new HomeMovieAdapter(new ArrayList<>(), this);
+        bestMoviesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        bestMoviesRecyclerView.setAdapter(bestMoviesAdapter);
+
+
+        rankingAdapter = new RankingAdapter(new ArrayList<>(), this);
+        verticalRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        verticalRecyclerView.setAdapter(rankingAdapter);
+
+        recyclerViewSearchResults = findViewById(R.id.recyclerViewSearchResults);
+        recyclerViewSearchResults.setLayoutManager(new LinearLayoutManager(this));
+
+        searchResultsAdapter = new HomeMovieAdapter(new ArrayList<>(), this, R.layout.item_search_result_text);
+        recyclerViewSearchResults.setAdapter(searchResultsAdapter);
+
         loadMoviesFromFirebase();
         loadVerticalMoviesFromFirebase();
-    }
 
+
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterMovies(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
     private void toggleNotificationPanel() {
         if (isPanelShown) {
             notificationPanel.animate()
@@ -98,7 +177,6 @@ public class MainActivity2 extends AppCompatActivity {
         }
         isPanelShown = !isPanelShown;
     }
-
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (isPanelShown) {
@@ -110,7 +188,6 @@ public class MainActivity2 extends AppCompatActivity {
         }
         return super.dispatchTouchEvent(ev);
     }
-
     public void onMenuButtonClick(View view) {
         int id = view.getId();
         if (id == R.id.btn_account) {
@@ -143,6 +220,7 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     private void loadMoviesFromFirebase() {
+
         nowPlayingMovies = List.of(
                 new Movie("Movie 1", R.drawable.quydinh, "np_001"),
                 new Movie("Movie 2", R.drawable.rapphim, "np_002"),
@@ -154,16 +232,20 @@ public class MainActivity2 extends AppCompatActivity {
         movieListRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                List<Movie> bestMovieList = new ArrayList<>();
+                allMovies.clear();
+                List<Movie> tempBestMovieList = new ArrayList<>();
                 for (DataSnapshot movieSnapshot : snapshot.getChildren()) {
                     String movieId = movieSnapshot.getKey();
                     String title = movieSnapshot.child("ten_phim").getValue(String.class);
                     String imageUrl = movieSnapshot.child("poster").getValue(String.class);
                     if (title != null && imageUrl != null && movieId != null) {
-                        bestMovieList.add(new Movie(title, imageUrl, movieId));
+                        Movie movie = new Movie(title, imageUrl, movieId);
+                        allMovies.add(movie);
+                        tempBestMovieList.add(movie);
                     }
                 }
-                setupBestMoviesRecyclerView(bestMovieList);
+
+                bestMoviesAdapter.updateList(tempBestMovieList);
             }
 
             @Override
@@ -198,9 +280,7 @@ public class MainActivity2 extends AppCompatActivity {
 
                 verticalList.sort(Comparator.comparing((Movie m) -> m.getRating() != null ? m.getRating() : 0.0).reversed());
 
-                RankingAdapter adapter = new RankingAdapter(verticalList, MainActivity2.this);
-                verticalRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity2.this));
-                verticalRecyclerView.setAdapter(adapter);
+                rankingAdapter.updateList(verticalList);
             }
 
             @Override
@@ -215,10 +295,40 @@ public class MainActivity2 extends AppCompatActivity {
         nowPlayingViewPager.setAdapter(adapter);
     }
 
-    private void setupBestMoviesRecyclerView(List<Movie> movies) {
-        HomeMovieAdapter adapter = new HomeMovieAdapter(movies, this);
-        bestMoviesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        bestMoviesRecyclerView.setAdapter(adapter);
+    private void filterMovies(String query) {
+        if (query.isEmpty()) {
+            recyclerViewSearchResults.setVisibility(View.GONE);
+            nowPlayingContainer.setVisibility(View.VISIBLE);
+            bestMoviesContainer.setVisibility(View.VISIBLE);
+            rankingContainer.setVisibility(View.VISIBLE);
+            textView7.setVisibility(View.VISIBLE);
+            txt_danh_sach_theo_danh_gia.setVisibility(View.VISIBLE);
+            textView9.setVisibility(View.VISIBLE);
+            textView10.setVisibility(View.VISIBLE);
+            serviceContainer.setVisibility(View.VISIBLE);
+            aaa.setVisibility(View.VISIBLE);
+            categoriesContainer.setVisibility(View.VISIBLE);
+
+            bestMoviesAdapter.updateList(allMovies);
+        } else {
+            recyclerViewSearchResults.setVisibility(View.VISIBLE);
+            nowPlayingContainer.setVisibility(View.GONE);
+            bestMoviesContainer.setVisibility(View.GONE);
+            rankingContainer.setVisibility(View.GONE);
+            textView7.setVisibility(View.GONE);
+            txt_danh_sach_theo_danh_gia.setVisibility(View.GONE);
+            textView9.setVisibility(View.GONE);
+            textView10.setVisibility(View.GONE);
+            serviceContainer.setVisibility(View.GONE);
+            aaa.setVisibility(View.GONE);
+            categoriesContainer.setVisibility(View.GONE);
+
+
+            List<Movie> filteredList = allMovies.stream()
+                    .filter(movie -> movie.getTitle().toLowerCase().contains(query.toLowerCase()))
+                    .collect(Collectors.toList());
+            searchResultsAdapter.updateList(filteredList); // Cập nhật RecyclerView tìm kiếm
+        }
     }
 
     private void openTheLoai(String theLoai) {
