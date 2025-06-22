@@ -14,6 +14,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,7 +23,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ChitietMovie_Activity extends AppCompatActivity {
 
@@ -29,13 +33,19 @@ public class ChitietMovie_Activity extends AppCompatActivity {
     private TextView titleDetail, description, releaseDate, director, cast, rating, thoiluong, theloai;
     private Button bookTicket;
     private ImageButton back;
+    private ImageButton btnFavorite;
+
+    private FirebaseAuth mAuth;
+    private DatabaseReference favoriteMoviesRef;
+    private String currentMovieId;
+    private boolean isFavorite = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chitiet_movie);
 
-        // Ánh xạ view
+
         back = findViewById(R.id.back);
         trailerWebView = findViewById(R.id.trailer_video);
         titleDetail = findViewById(R.id.title_detail);
@@ -47,31 +57,46 @@ public class ChitietMovie_Activity extends AppCompatActivity {
         rating = findViewById(R.id.rating);
         bookTicket = findViewById(R.id.book_ticket);
         theloai = findViewById(R.id.theloai);
+        btnFavorite = findViewById(R.id.btn_favorite);
+
+        mAuth = FirebaseAuth.getInstance();
 
         // Nhận movieId từ intent
-        String movieId = getIntent().getStringExtra("movieId");
-        if (movieId == null || movieId.isEmpty()) {
+        currentMovieId = getIntent().getStringExtra("movieId");
+        if (currentMovieId == null || currentMovieId.isEmpty()) {
             Toast.makeText(this, "Không tìm thấy ID phim", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
+        // Khởi tạo DatabaseReference cho phim yêu thích của người dùng
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            // Đường dẫn trong Firebase: users/{userId}/favoriteMovies/{movieId}
+            favoriteMoviesRef = FirebaseDatabase.getInstance().getReference("users")
+                    .child(userId).child("favoriteMovies").child(currentMovieId);
+            checkFavoriteStatus(); // Kiểm tra trạng thái yêu thích khi activity được tạo
+        } else {
+            // Nếu chưa đăng nhập, ẩn nút yêu thích (hoặc vô hiệu hóa, hiển thị thông báo)
+            btnFavorite.setVisibility(View.GONE);
+            Toast.makeText(this, "Đăng nhập để thêm phim vào yêu thích", Toast.LENGTH_SHORT).show();
+        }
+
         // --- Lấy link ảnh từ danh_sach_phim ---
         DatabaseReference posterRef = FirebaseDatabase.getInstance()
                 .getReference("danh_sach_phim") // Lấy từ danh_sach_phim
-                .child(movieId);
+                .child(currentMovieId);
 
         posterRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot posterSnapshot) {
                 String imageUrl = posterSnapshot.child("poster").getValue(String.class); // Lấy URL poster
-                // (Optional) If you want to display the poster here, add an ImageView in layout
-                // and use Glide.with(ChitietMovie_Activity.this).load(imageUrl).into(yourImageView);
 
                 // --- Lấy thông tin chi tiết từ chi_tiet_phim ---
                 DatabaseReference detailRef = FirebaseDatabase.getInstance()
                         .getReference("chi_tiet_phim") // Lấy từ chi_tiet_phim
-                        .child(movieId);
+                        .child(currentMovieId);
 
                 detailRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -137,8 +162,94 @@ public class ChitietMovie_Activity extends AppCompatActivity {
 
         bookTicket.setOnClickListener(v -> {
             Intent intent = new Intent(this, DatVe_Activity.class);
-            intent.putExtra("movieId", movieId);
+            intent.putExtra("movieId", currentMovieId);
             startActivity(intent);
         });
+
+        // Xử lý sự kiện click cho nút yêu thích
+        btnFavorite.setOnClickListener(v -> toggleFavorite());
+    }
+
+
+    private void checkFavoriteStatus() {
+        if (favoriteMoviesRef == null) return;
+
+        favoriteMoviesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    isFavorite = true;
+                    btnFavorite.setImageResource(R.drawable.ic_favorite_filled);
+                } else {
+                    isFavorite = false;
+                    btnFavorite.setImageResource(R.drawable.ic_favorite_border);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ChitietMovie_Activity.this, "Lỗi kiểm tra trạng thái yêu thích: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    private void toggleFavorite() {
+        if (mAuth.getCurrentUser() == null) {
+            Toast.makeText(this, "Bạn cần đăng nhập để thêm phim vào yêu thích.", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, LoginActivity.class));
+            return;
+        }
+
+        if (favoriteMoviesRef == null) {
+            Toast.makeText(this, "Lỗi: Không thể truy cập danh sách yêu thích của bạn.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (isFavorite) {
+
+            favoriteMoviesRef.removeValue()
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(ChitietMovie_Activity.this, "Đã xóa khỏi danh sách yêu thích.", Toast.LENGTH_SHORT).show();
+                        isFavorite = false;
+                        btnFavorite.setImageResource(R.drawable.ic_favorite_border);
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(ChitietMovie_Activity.this, "Lỗi khi xóa khỏi yêu thích: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+
+            final String title = titleDetail.getText().toString();
+
+            DatabaseReference moviePosterRef = FirebaseDatabase.getInstance().getReference("danh_sach_phim").child(currentMovieId);
+            moviePosterRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String imageUrl = snapshot.child("poster").getValue(String.class);
+                    if (imageUrl != null && title != null && !title.isEmpty()) {
+                        Map<String, Object> movieData = new HashMap<>();
+                        movieData.put("title", title);
+                        movieData.put("imageUrl", imageUrl);
+
+                        favoriteMoviesRef.setValue(movieData)
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(ChitietMovie_Activity.this, "Đã thêm vào danh sách yêu thích.", Toast.LENGTH_SHORT).show();
+                                    isFavorite = true;
+                                    btnFavorite.setImageResource(R.drawable.ic_favorite_filled);
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(ChitietMovie_Activity.this, "Lỗi khi thêm vào yêu thích: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+                    } else {
+                        Toast.makeText(ChitietMovie_Activity.this, "Không thể lấy thông tin phim để thêm vào yêu thích.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(ChitietMovie_Activity.this, "Lỗi truy xuất dữ liệu poster: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 }

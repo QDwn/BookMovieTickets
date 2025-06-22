@@ -1,3 +1,4 @@
+// app/src/main/java/com/example/movieee/MainActivity2.java
 package com.example.movieee;
 
 import android.content.Context;
@@ -215,7 +216,13 @@ public class MainActivity2 extends AppCompatActivity {
                 startActivity(new Intent(MainActivity2.this, LoginActivity.class));
             }
         } else if (id == R.id.btn_movie) {
-            Toast.makeText(this, "Chức năng Phim đang được phát triển", Toast.LENGTH_SHORT).show();
+            // Thay đổi logic ở đây để mở FavoriteMoviesActivity
+            if (mAuth.getCurrentUser() != null) {
+                startActivity(new Intent(MainActivity2.this, FavoriteMoviesActivity.class));
+            } else {
+                Toast.makeText(this, "Bạn cần đăng nhập để xem phim yêu thích.", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity2.this, LoginActivity.class));
+            }
         }
     }
 

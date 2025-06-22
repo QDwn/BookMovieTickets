@@ -70,7 +70,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         public MovieViewHolder(@NonNull View itemView) {
             super(itemView);
             moviePoster = itemView.findViewById(R.id.movie_poster);
-            movieTitle = itemView.findViewById(R.id.movie_title);
+            movieTitle = itemView.findViewById(R.id.tv_movie_title_common); // Đã sửa ID ở đây
         }
     }
 }

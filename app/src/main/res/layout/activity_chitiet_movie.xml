@@ -11,16 +11,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Nút quay lại -->
-        <ImageButton
-            android:id="@+id/back"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/back"
-            android:contentDescription="Quay lại" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageButton
+                android:id="@+id/back"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/back"
+                android:contentDescription="Quay lại"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"/>
 
-        <!-- Poster phim -->
+            <ImageButton
+                android:id="@+id/btn_favorite"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_favorite_border"
+                android:contentDescription="Thêm vào yêu thích"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:padding="4dp" />
+        </RelativeLayout>
+
         <WebView
             android:id="@+id/trailer_video"
             android:layout_width="match_parent"
@@ -29,9 +44,6 @@
             android:layout_marginBottom="12dp"
             android:background="#000" />
 
-
-
-        <!-- Tiêu đề phim -->
         <TextView
             android:id="@+id/title_detail"
             android:layout_width="match_parent"
@@ -42,7 +54,6 @@
             android:layout_marginTop="16dp"
             android:text="Tên phim" />
 
-        <!-- Mô tả phim -->
         <TextView
             android:id="@+id/description"
             android:layout_width="match_parent"
@@ -52,7 +63,6 @@
             android:textColor="@color/white"
             android:text="Mô tả phim" />
 
-        <!-- Ngày phát hành -->
         <TextView
             android:id="@+id/release_date"
             android:layout_width="match_parent"
@@ -61,7 +71,6 @@
             android:textSize="14sp"
             android:textColor="@color/white"
             android:text="Ngày chiếu:" />
-        <!-- thời lượng phim -->
         <TextView
             android:id="@+id/thoiluong"
             android:layout_width="match_parent"
@@ -71,7 +80,6 @@
             android:textColor="@color/white"
             android:text="Thời lượng:" />
 
-        <!-- Đạo diễn -->
         <TextView
             android:id="@+id/director"
             android:layout_width="match_parent"
@@ -81,7 +89,6 @@
             android:textColor="@color/white"
             android:text="Đạo diễn:" />
 
-        <!-- Diễn viên -->
         <TextView
             android:id="@+id/cast"
             android:layout_width="match_parent"
@@ -91,7 +98,6 @@
             android:textColor="@color/white"
             android:text="Diễn viên:" />
 
-        <!--Thể loại-->
         <TextView
             android:id="@+id/theloai"
             android:layout_width="match_parent"
@@ -101,7 +107,6 @@
             android:textColor="@color/white"
             android:text="Thể loại:" />
 
-        <!-- Đánh giá -->
         <TextView
             android:id="@+id/rating"
             android:layout_width="match_parent"
@@ -111,7 +116,6 @@
             android:textColor="@color/white"
             android:text="Đánh giá:" />
 
-        <!-- Nút đặt vé -->
         <Button
             android:id="@+id/book_ticket"
             android:layout_width="match_parent"
