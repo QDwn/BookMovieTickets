@@ -3,6 +3,7 @@ package com.example.movieee;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
@@ -141,6 +143,8 @@ public class MainActivity2 extends AppCompatActivity {
 
         searchResultsAdapter = new HomeMovieAdapter(new ArrayList<>(), this, R.layout.item_search_result_text);
         recyclerViewSearchResults.setAdapter(searchResultsAdapter);
+
+        loadThongBaoTuFirebase();
 
         loadMoviesFromFirebase();
         loadVerticalMoviesFromFirebase();
@@ -343,4 +347,42 @@ public class MainActivity2 extends AppCompatActivity {
         intent.putExtra("genre", theLoai);
         startActivity(intent);
     }
-}
+    private void loadThongBaoTuFirebase() {
+        SharedPreferences sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        String userEmail = sharedPref.getString("user_email", "guest").replace(".", "_");
+
+        DatabaseReference thongBaoRef = FirebaseDatabase.getInstance()
+                .getReference("thong_bao")
+                .child(userEmail);
+
+        thongBaoRef.orderByChild("timestamp").limitToLast(10)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot tbSnapshot : snapshot.getChildren()) {
+                            String noiDung = tbSnapshot.child("noiDung").getValue(String.class);
+                            if (noiDung != null) {
+                                addNotification(noiDung);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(MainActivity2.this, "Lỗi tải thông báo", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }
+    public void addNotification(String message) {
+        LinearLayout notificationContainer = findViewById(R.id.notification_container);
+
+        TextView textView = new TextView(this);
+        textView.setText(message);
+        textView.setTextSize(16);
+        textView.setPadding(8, 8, 8, 8);
+        textView.setTextColor(getResources().getColor(R.color.black));
+        notificationContainer.addView(textView);
+
+        }
+    }

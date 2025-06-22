@@ -196,5 +196,18 @@ public class ThanhToan_Activity extends AppCompatActivity {
                 Toast.makeText(ThanhToan_Activity.this, "Lỗi kiểm tra ghế: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+        String thongBaoText = "Bạn đã đặt vé thành công cho phim " + movieTitle + ", suất chiếu ngày " + ngay + " lúc " + gio;
+        DatabaseReference thongBaoRef = FirebaseDatabase.getInstance()
+                .getReference("thong_bao")
+                .child(userEmail.replace(".", "_"));
+
+        String thongBaoId = thongBaoRef.push().getKey();
+        if (thongBaoId != null) {
+            Map<String, Object> thongBaoData = new HashMap<>();
+            thongBaoData.put("noiDung", thongBaoText);
+            thongBaoData.put("timestamp", System.currentTimeMillis());
+            thongBaoRef.child(thongBaoId).setValue(thongBaoData);
+        }
+
     }
 }
