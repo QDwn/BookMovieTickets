@@ -1,8 +1,10 @@
-package com.example.movieee;
+package com.example.movieee.Admin;
 
 import android.os.Bundle;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.movieee.R;
 
 public class UserActivity extends AppCompatActivity {
 

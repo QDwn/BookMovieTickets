@@ -1,4 +1,4 @@
-package com.example.movieee;
+package com.example.movieee.Admin;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager; // Import LinearLayoutM
 import androidx.recyclerview.widget.RecyclerView; // Import RecyclerView
 
 import com.example.movieee.Adapter.UserAdapter;
+import com.example.movieee.Model.HelperClass;
+import com.example.movieee.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

@@ -1,5 +1,5 @@
 // app/src/main/java/com/example/movieee/MainActivity2.java
-package com.example.movieee;
+package com.example.movieee.Home;
 
 import android.content.Context;
 import android.content.Intent;
@@ -33,7 +33,9 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.movieee.Adapter.HomeMovieAdapter;
 import com.example.movieee.Adapter.NowPlayingAdapter;
 import com.example.movieee.Adapter.RankingAdapter;
+import com.example.movieee.Auth.LoginActivity;
 import com.example.movieee.Model.Movie;
+import com.example.movieee.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
 
@@ -76,45 +78,46 @@ public class MainActivity2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main2);
+        setContentView(com.example.movieee.R.layout.activity_main2);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(com.example.movieee.R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        nowPlayingViewPager = findViewById(R.id.now_playing_view_pager);
-        bestMoviesRecyclerView = findViewById(R.id.view1);
-        verticalRecyclerView = findViewById(R.id.recycler_vertical);
-        notificationPanel = findViewById(R.id.notification_panel);
-        searchEditText = findViewById(R.id.editTextText);
+        nowPlayingViewPager = findViewById(com.example.movieee.R.id.now_playing_view_pager);
+        bestMoviesRecyclerView = findViewById(com.example.movieee.R.id.view1);
+        verticalRecyclerView = findViewById(com.example.movieee.R.id.recycler_vertical);
+        notificationPanel = findViewById(com.example.movieee.R.id.notification_panel);
+        searchEditText = findViewById(com.example.movieee.R.id.editTextText);
 
 
-        nowPlayingContainer = findViewById(R.id.nowPlayingContainer);
-        bestMoviesContainer = findViewById(R.id.bestMoviesContainer);
-        rankingContainer = findViewById(R.id.rankingContainer);
-        textView7 = findViewById(R.id.textView7);
-        txt_danh_sach_theo_danh_gia = findViewById(R.id.txt_danh_sach_theo_danh_gia);
-        textView9 = findViewById(R.id.textView9);
-        textView10 = findViewById(R.id.textView10);
-        serviceContainer = findViewById(R.id.serviceContainer);
-        aaa = findViewById(R.id.aaa);
-        categoriesContainer = findViewById(R.id.categoriesContainer);
+        nowPlayingContainer = findViewById(com.example.movieee.R.id.nowPlayingContainer);
+        bestMoviesContainer = findViewById(com.example.movieee.R.id.bestMoviesContainer);
+        rankingContainer = findViewById(com.example.movieee.R.id.rankingContainer);
+        textView7 = findViewById(com.example.movieee.R.id.textView7);
+        txt_danh_sach_theo_danh_gia = findViewById(com.example.movieee.R.id.txt_danh_sach_theo_danh_gia);
+        textView9 = findViewById(com.example.movieee.R.id.textView9);
+        textView10 = findViewById(com.example.movieee.R.id.textView10);
+        serviceContainer = findViewById(com.example.movieee.R.id.serviceContainer);
+        aaa = findViewById(com.example.movieee.R.id.aaa);
+        categoriesContainer = findViewById(com.example.movieee.R.id.categoriesContainer);
 
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(com.example.movieee.R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        ImageButton bellButton = findViewById(R.id.bell_icon);
+        //Thông báo
+        ImageButton bellButton = findViewById(com.example.movieee.R.id.bell_icon);
         bellButton.setOnClickListener(v -> toggleNotificationPanel());
 
-        // Init buttons
-        btnHanhDong = findViewById(R.id.btnHanhDong);
-        btnHoatHinh = findViewById(R.id.btnHoatHinh);
-        btnChinhKich = findViewById(R.id.btnChinhKich);
-        btnPhieuLuu = findViewById(R.id.btnPhieuLuu);
-        btnKinhDi = findViewById(R.id.btnKinhDi);
+        // Thể loại
+        btnHanhDong = findViewById(com.example.movieee.R.id.btnHanhDong);
+        btnHoatHinh = findViewById(com.example.movieee.R.id.btnHoatHinh);
+        btnChinhKich = findViewById(com.example.movieee.R.id.btnChinhKich);
+        btnPhieuLuu = findViewById(com.example.movieee.R.id.btnPhieuLuu);
+        btnKinhDi = findViewById(com.example.movieee.R.id.btnKinhDi);
+
 
         btnHanhDong.setOnClickListener(v -> openTheLoai("Hành động"));
         btnHoatHinh.setOnClickListener(v -> openTheLoai("Hoạt hình"));
@@ -138,10 +141,10 @@ public class MainActivity2 extends AppCompatActivity {
         verticalRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         verticalRecyclerView.setAdapter(rankingAdapter);
 
-        recyclerViewSearchResults = findViewById(R.id.recyclerViewSearchResults);
+        recyclerViewSearchResults = findViewById(com.example.movieee.R.id.recyclerViewSearchResults);
         recyclerViewSearchResults.setLayoutManager(new LinearLayoutManager(this));
 
-        searchResultsAdapter = new HomeMovieAdapter(new ArrayList<>(), this, R.layout.item_search_result_text);
+        searchResultsAdapter = new HomeMovieAdapter(new ArrayList<>(), this, com.example.movieee.R.layout.item_search_result_text);
         recyclerViewSearchResults.setAdapter(searchResultsAdapter);
 
         loadThongBaoTuFirebase();
@@ -169,6 +172,7 @@ public class MainActivity2 extends AppCompatActivity {
     }
     private void toggleNotificationPanel() {
         if (isPanelShown) {
+
             notificationPanel.animate()
                     .translationX(notificationPanel.getWidth())
                     .setDuration(300)
@@ -195,7 +199,7 @@ public class MainActivity2 extends AppCompatActivity {
     }
     public void onMenuButtonClick(View view) {
         int id = view.getId();
-        if (id == R.id.btn_account) {
+        if (id == com.example.movieee.R.id.btn_account) {
             String currentLoggedInUserEmail = mAuth.getCurrentUser() != null ?
                     mAuth.getCurrentUser().getEmail() : null;
 
@@ -210,16 +214,16 @@ public class MainActivity2 extends AppCompatActivity {
                 Toast.makeText(this, "Bạn chưa đăng nhập.", Toast.LENGTH_LONG).show();
                 startActivity(new Intent(MainActivity2.this, LoginActivity.class));
             }
-        } else if (id == R.id.btn_home) {
+        } else if (id == com.example.movieee.R.id.btn_home) {
             Toast.makeText(this, "Bạn đang ở Trang chủ", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.btn_ticket) {
+        } else if (id == com.example.movieee.R.id.btn_ticket) {
             if (mAuth.getCurrentUser() != null) {
                 startActivity(new Intent(MainActivity2.this, UserTicketsActivity.class));
             } else {
                 Toast.makeText(this, "Bạn cần đăng nhập để xem vé đã đặt.", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(MainActivity2.this, LoginActivity.class));
             }
-        } else if (id == R.id.btn_movie) {
+        } else if (id == com.example.movieee.R.id.btn_movie) {
             // Thay đổi logic ở đây để mở FavoriteMoviesActivity
             if (mAuth.getCurrentUser() != null) {
                 startActivity(new Intent(MainActivity2.this, FavoriteMoviesActivity.class));
@@ -233,9 +237,9 @@ public class MainActivity2 extends AppCompatActivity {
     private void loadMoviesFromFirebase() {
 
         nowPlayingMovies = List.of(
-                new Movie("Movie 1", R.drawable.quydinh, "np_001"),
-                new Movie("Movie 2", R.drawable.rapphim, "np_002"),
-                new Movie("Movie 3", R.drawable.rapphim1, "np_003")
+                new Movie("Movie 1", com.example.movieee.R.drawable.quydinh, "np_001"),
+                new Movie("Movie 2", com.example.movieee.R.drawable.rapphim, "np_002"),
+                new Movie("Movie 3", com.example.movieee.R.drawable.rapphim1, "np_003")
         );
         setupNowPlayingViewPager(nowPlayingMovies);
 

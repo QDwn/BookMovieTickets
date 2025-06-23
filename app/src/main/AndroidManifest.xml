@@ -13,64 +13,64 @@
         android:theme="@style/Theme.Movieee"
         tools:targetApi="31">
         <activity
-            android:name=".FavoriteMoviesActivity"
+            android:name=".Home.FavoriteMoviesActivity"
             android:exported="false" />
         <activity
-            android:name=".UserTicketsActivity"
+            android:name=".Home.UserTicketsActivity"
             android:exported="false" />
         <activity
-            android:name=".AccountDetailsActivity"
+            android:name=".Home.AccountDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".ThanhToan_Activity"
+            android:name=".Booking.ThanhToan_Activity"
             android:exported="false" />
         <activity
-            android:name=".ResetPasswordActivity"
+            android:name=".Auth.ResetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".UserManagementActivity"
+            android:name=".Admin.UserManagementActivity"
             android:exported="false" />
         <activity
-            android:name=".MovieManagementActivity"
+            android:name=".Admin.MovieManagementActivity"
             android:exported="false" />
         <activity
-            android:name=".UserActivity"
+            android:name=".Admin.UserActivity"
             android:exported="false" />
         <activity
-            android:name=".AdminActivity"
+            android:name=".Admin.AdminActivity"
             android:exported="false" />
         <activity
-            android:name=".VerifyOtpActivity"
+            android:name=".Auth.VerifyOtpActivity"
             android:exported="false" />
         <activity
-            android:name=".ForgotPasswordActivity"
+            android:name=".Auth.ForgotPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".Auth.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".SignupActivity"
+            android:name=".Auth.SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity2"
+            android:name=".Home.MainActivity2"
             android:exported="false" />
         <activity
-            android:name=".ChitietMovie_Activity"
+            android:name=".Booking.ChitietMovie_Activity"
             android:exported="true" />
         <activity
-            android:name=".DatVe_Activity"
+            android:name=".Booking.DatVe_Activity"
             android:exported="true" />
         <activity
             android:name=".ItemMovieActivity"
             android:exported="true" />
         <activity
-            android:name=".DatGhe_Activity"
+            android:name=".Booking.DatGhe_Activity"
             android:exported="false" />
         <activity
-            android:name=".BongNuoc_Activity"
+            android:name=".Booking.BongNuoc_Activity"
             android:exported="false" />
         <activity
-            android:name=".TheLoai_Activity"
+            android:name=".Home.TheLoai_Activity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

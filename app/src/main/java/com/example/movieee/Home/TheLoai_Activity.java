@@ -1,4 +1,4 @@
-package com.example.movieee;
+package com.example.movieee.Home;
 
 import android.os.Bundle;
 import android.widget.TextView;
@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieee.Adapter.HomeMovieAdapter;
 import com.example.movieee.Model.Movie;
+import com.example.movieee.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

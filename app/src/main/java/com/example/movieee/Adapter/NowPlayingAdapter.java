@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.movieee.ChitietMovie_Activity;
+import com.example.movieee.Booking.ChitietMovie_Activity;
 import com.example.movieee.Model.Movie;
 import com.example.movieee.R;
 import com.google.android.material.imageview.ShapeableImageView;

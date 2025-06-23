@@ -1,4 +1,4 @@
-package com.example.movieee;
+package com.example.movieee.Model;
 
 public class HelperClass {
     String username; // Đã thêm trường username

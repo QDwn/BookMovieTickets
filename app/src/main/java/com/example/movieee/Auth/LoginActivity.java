@@ -1,4 +1,4 @@
-package com.example.movieee;
+package com.example.movieee.Auth;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +19,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 // Imports cho Google Sign-In
+import com.example.movieee.Admin.AdminActivity;
+import com.example.movieee.Model.HelperClass;
+import com.example.movieee.Home.MainActivity2;
+import com.example.movieee.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;

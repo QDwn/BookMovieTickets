@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@color/black"
     android:padding="16dp"
-    tools:context=".UserTicketsActivity">
+    tools:context=".Home.UserTicketsActivity">
 
     <TextView
         android:layout_width="wrap_content"

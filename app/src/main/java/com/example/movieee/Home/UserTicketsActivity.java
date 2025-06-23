@@ -1,6 +1,6 @@
 // File: qdwn/bookmovietickets/BookMovieTickets-codetest/app/src/main/java/com/example/movieee/UserTicketsActivity.java
 
-package com.example.movieee;
+package com.example.movieee.Home;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieee.Adapter.TicketAdapter;
 import com.example.movieee.Model.Ticket;
+import com.example.movieee.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

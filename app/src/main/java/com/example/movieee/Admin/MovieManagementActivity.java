@@ -1,4 +1,4 @@
-package com.example.movieee;
+package com.example.movieee.Admin;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieee.Adapter.MovieManagementAdapter;
 import com.example.movieee.Model.Movie;
+import com.example.movieee.R;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;

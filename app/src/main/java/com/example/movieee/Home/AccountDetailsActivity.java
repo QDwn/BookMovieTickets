@@ -1,10 +1,9 @@
-package com.example.movieee;
+package com.example.movieee.Home;
 
 import android.content.Context; // Thêm import này
 import android.content.Intent;
 import android.content.SharedPreferences; // Thêm import này
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView; // Thêm ImageView
 import android.widget.LinearLayout; // Thêm LinearLayout
@@ -14,7 +13,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide; // Thêm Glide nếu muốn tải ảnh avatar
+import com.example.movieee.Auth.ForgotPasswordActivity;
+import com.example.movieee.Auth.LoginActivity;
+import com.example.movieee.Model.HelperClass;
+import com.example.movieee.R;
 import com.google.android.material.imageview.ShapeableImageView; // Thêm ShapeableImageView
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

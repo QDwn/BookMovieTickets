@@ -20,7 +20,7 @@ public class Movie {
         // Default constructor required for calls to DataSnapshot.getValue(Movie.class)
     }
 
-    // Constructor for NowPlaying (using drawable ID and adding movieId for consistency)
+    // Constructor sử dụng cho about us
     public Movie(String title, int imageResId, String movieId) {
         this.title = title;
         this.imageResId = imageResId;
@@ -35,7 +35,7 @@ public class Movie {
         this.rating = null;
     }
 
-    // Constructor for movies loaded from Firebase with full details (for management)
+    // Constructor cho chi tiét thông tin phim
     public Movie(String title, String imageUrl, String movieId, String description,
                  String trailerUrl, String releaseDate, String duration,
                  String director, List<String> cast, List<String> theLoai, Double rating) {
@@ -52,12 +52,11 @@ public class Movie {
         this.rating = rating;
     }
 
-    // For simplicity when only title, imageUrl, movieId are available (e.g., from HomeMovieAdapter)
     public Movie(String title, String imageUrl, String movieId) {
         this.title = title;
         this.imageUrl = imageUrl;
         this.movieId = movieId;
-        // Initialize other fields to null or default values if not provided
+        // các giá trị còn lại để là null
         this.description = null;
         this.trailerUrl = null;
         this.releaseDate = null;

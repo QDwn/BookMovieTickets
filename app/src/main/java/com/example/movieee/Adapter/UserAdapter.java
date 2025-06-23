@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.movieee.HelperClass;
+import com.example.movieee.Model.HelperClass;
 import com.example.movieee.R;
 
 import java.util.ArrayList;

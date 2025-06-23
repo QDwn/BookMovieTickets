@@ -1,4 +1,4 @@
-package com.example.movieee;
+package com.example.movieee.Booking;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movieee.Adapter.SeatAdapter;
 import com.example.movieee.Model.Seat;
+import com.example.movieee.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
