@@ -19,7 +19,7 @@ import com.example.movieee.Model.HelperClass;
 import com.example.movieee.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.auth.FirebaseAuth; // Thêm import này
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -31,27 +31,27 @@ public class SignupActivity extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference reference;
-    private FirebaseAuth mAuth; // Khai báo FirebaseAuth
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        // Ánh xạ các view với ID ĐÚNG từ activity_signup.xml
-        signupUsername = findViewById(R.id.signup_username); // Đã sửa ID
-        signupPhone = findViewById(R.id.signup_phone);     // Đã sửa ID
-        signupEmail = findViewById(R.id.signup_email);     // Đã sửa ID
-        signupPassword = findViewById(R.id.signup_pw);     // Đã sửa ID
-        signupButton = findViewById(R.id.signup_button);   // Đã sửa ID
-        loginRedirectText = findViewById(R.id.textsignin); // Đã sửa ID
-        checkboxSignup = findViewById(R.id.checkBoxSignUp);      // Đã sửa ID (align với XML)
-        eyeIcon = findViewById(R.id.eye_icon);             // Giữ nguyên, cần đảm bảo ID này có trong XML
 
-        // Khởi tạo FirebaseAuth
+        signupUsername = findViewById(R.id.signup_username);
+        signupPhone = findViewById(R.id.signup_phone);
+        signupEmail = findViewById(R.id.signup_email);
+        signupPassword = findViewById(R.id.signup_pw);
+        signupButton = findViewById(R.id.signup_button);
+        loginRedirectText = findViewById(R.id.textsignin);
+        checkboxSignup = findViewById(R.id.checkBoxSignUp);
+        eyeIcon = findViewById(R.id.eye_icon);
+
+
         mAuth = FirebaseAuth.getInstance();
 
-        // Đặt text checkbox có màu đỏ
+
         checkboxSignup.setText(Html.fromHtml("I agree with <font color='#FF0000'>privacy</font> and <font color='#FF0000'>policy</font>"));
 
         // Xử lý hiển thị/ẩn mật khẩu
@@ -61,20 +61,20 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (isPasswordVisible[0]) {
-                    // Ẩn mật khẩu
+                    // Ẩn
                     signupPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                    eyeIcon.setImageResource(R.drawable.ic_eye_off); // Cần drawable ic_eye_off
+                    eyeIcon.setImageResource(R.drawable.ic_eye_off);
                 } else {
-                    // Hiện mật khẩu
+                    // Hiện
                     signupPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                    eyeIcon.setImageResource(R.drawable.ic_eye); // Cần drawable ic_eye
+                    eyeIcon.setImageResource(R.drawable.ic_eye);
                 }
                 isPasswordVisible[0] = !isPasswordVisible[0];
-                signupPassword.setSelection(signupPassword.length()); // Giữ con trỏ ở cuối
+                signupPassword.setSelection(signupPassword.length());
             }
         });
 
-        // Xử lý nút đăng ký
+        //  đăng ký
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,25 +83,23 @@ public class SignupActivity extends AppCompatActivity {
                 String email = signupEmail.getText().toString().trim();
                 String password = signupPassword.getText().toString().trim();
 
-                // Kiểm tra đã đồng ý điều khoản chưa
                 if (!checkboxSignup.isChecked()) {
                     Toast.makeText(SignupActivity.this, "Please agree to the privacy and policy terms", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                // Kiểm tra các trường nhập
                 if (username.isEmpty() || phone.isEmpty() || email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(SignupActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                // === BẮT ĐẦU THAY ĐỔI TRONG SIGNUPACTIVITY ===
-                // 1. Tạo tài khoản trong Firebase Authentication trước
+
+
                 mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(SignupActivity.this, task -> {
                             if (task.isSuccessful()) {
                                 // Tài khoản Firebase Auth đã được tạo thành công
-                                Toast.makeText(SignupActivity.this, "Đăng ký Auth thành công.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignupActivity.this, "Đăng ký thành công.", Toast.LENGTH_SHORT).show();
 
                                 // 2. Sau đó, lưu dữ liệu chi tiết vào Realtime Database
                                 database = FirebaseDatabase.getInstance();
@@ -119,23 +117,20 @@ public class SignupActivity extends AppCompatActivity {
                                             finish();
                                         })
                                         .addOnFailureListener(e -> {
-                                            // Xảy ra lỗi khi lưu vào Realtime Database sau khi Auth thành công
                                             Toast.makeText(SignupActivity.this, "Lỗi khi lưu dữ liệu người dùng: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                                            // Có thể xóa tài khoản Auth vừa tạo nếu không muốn có dữ liệu không nhất quán
                                             if (mAuth.getCurrentUser() != null) {
                                                 mAuth.getCurrentUser().delete();
                                             }
                                         });
                             } else {
                                 // Đăng ký Firebase Auth thất bại (ví dụ: email đã tồn tại, mật khẩu quá yếu)
-                                Toast.makeText(SignupActivity.this, "Đăng ký Auth thất bại: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(SignupActivity.this, "Đăng ký thất bại: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
-                // === KẾT THÚC THAY ĐỔI TRONG SIGNUPACTIVITY ===
+
             }
         });
 
-        // Chuyển sang màn hình đăng nhập
         loginRedirectText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

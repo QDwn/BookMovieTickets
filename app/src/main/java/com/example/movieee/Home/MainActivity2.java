@@ -203,9 +203,6 @@ public class MainActivity2 extends AppCompatActivity {
             String currentLoggedInUserEmail = mAuth.getCurrentUser() != null ?
                     mAuth.getCurrentUser().getEmail() : null;
 
-            Log.d("AccountDebug", "Email hiện tại: " + currentLoggedInUserEmail);
-            Toast.makeText(this, "Email: " + (currentLoggedInUserEmail != null ? currentLoggedInUserEmail : "NULL"), Toast.LENGTH_SHORT).show();
-
             if (currentLoggedInUserEmail != null) {
                 Intent intent = new Intent(MainActivity2.this, AccountDetailsActivity.class);
                 intent.putExtra("userEmail", currentLoggedInUserEmail);
@@ -224,7 +221,7 @@ public class MainActivity2 extends AppCompatActivity {
                 startActivity(new Intent(MainActivity2.this, LoginActivity.class));
             }
         } else if (id == com.example.movieee.R.id.btn_movie) {
-            // Thay đổi logic ở đây để mở FavoriteMoviesActivity
+
             if (mAuth.getCurrentUser() != null) {
                 startActivity(new Intent(MainActivity2.this, FavoriteMoviesActivity.class));
             } else {
@@ -259,10 +256,8 @@ public class MainActivity2 extends AppCompatActivity {
                         tempBestMovieList.add(movie);
                     }
                 }
-
                 bestMoviesAdapter.updateList(tempBestMovieList);
             }
-
             @Override
             public void onCancelled(DatabaseError error) {
                 Toast.makeText(MainActivity2.this, "Lỗi tải danh sách phim", Toast.LENGTH_SHORT).show();
@@ -342,7 +337,7 @@ public class MainActivity2 extends AppCompatActivity {
             List<Movie> filteredList = allMovies.stream()
                     .filter(movie -> movie.getTitle().toLowerCase().contains(query.toLowerCase()))
                     .collect(Collectors.toList());
-            searchResultsAdapter.updateList(filteredList); // Cập nhật RecyclerView tìm kiếm
+            searchResultsAdapter.updateList(filteredList);
         }
     }
 

@@ -60,8 +60,6 @@ public class UserTicketsActivity extends AppCompatActivity implements TicketAdap
         SharedPreferences sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
         currentUserEmail = sharedPref.getString("user_email", null);
 
-        Log.d("UserTicketsDebug", "Current logged-in email from SharedPreferences: " + currentUserEmail);
-        Toast.makeText(this, "Email hiện tại: " + (currentUserEmail != null ? currentUserEmail : "NULL"), Toast.LENGTH_LONG).show();
 
         if (currentUserEmail != null) {
             loadUserTickets(currentUserEmail);

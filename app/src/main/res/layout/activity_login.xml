@@ -155,7 +155,7 @@
                 android:layout_marginHorizontal="8dp"
                 android:layout_weight="1"
                 android:scaleType="centerInside"
-                android:src="@drawable/icon_gg" />
+                android:src="@drawable/google" />
 
             <ImageView
                 android:id="@+id/imageViewFacebook"
@@ -164,7 +164,7 @@
                 android:layout_marginHorizontal="8dp"
                 android:layout_weight="1"
                 android:scaleType="centerInside"
-                android:src="@drawable/logofb" />
+                android:src="@drawable/facebook" />
 
             <ImageView
                 android:id="@+id/imageViewInstagram"
@@ -173,7 +173,7 @@
                 android:layout_marginHorizontal="8dp"
                 android:layout_weight="1"
                 android:scaleType="centerInside"
-                android:src="@drawable/icon_ig" />
+                android:src="@drawable/whatsapp" />
         </LinearLayout>
 
         <LinearLayout

@@ -28,11 +28,11 @@ import com.google.firebase.database.ValueEventListener;
 
 public class AccountDetailsActivity extends AppCompatActivity {
 
-    private ShapeableImageView ivProfileAvatar; // Avatar
-    private TextView tvUsernameDisplay, tvEmailDisplay, tvPhoneDisplay; // Các TextView mới
+    private ShapeableImageView ivProfileAvatar;
+    private TextView tvUsernameDisplay, tvEmailDisplay, tvPhoneDisplay;
     private Button btnLogout;
-    private ImageView backArrow; // Nút quay lại
-    private LinearLayout layoutMyTicket, layoutChangePassword; // Các layout có thể click
+    private ImageView backArrow;
+    private LinearLayout layoutMyTicket, layoutChangePassword;
 
     private DatabaseReference userRef;
     private FirebaseAuth mAuth;
@@ -43,7 +43,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_details);
 
-        // Ánh xạ các View mới
+
         ivProfileAvatar = findViewById(R.id.iv_profile_avatar);
         tvUsernameDisplay = findViewById(R.id.tv_username_display);
         tvEmailDisplay = findViewById(R.id.tv_email_display);
@@ -55,17 +55,14 @@ public class AccountDetailsActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        // Lấy email người dùng từ SharedPreferences hoặc Intent
-        // Ưu tiên SharedPreferences vì nó lưu trữ trạng thái đăng nhập
+
         SharedPreferences sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
         currentUserEmail = sharedPref.getString("user_email", null);
 
         if (currentUserEmail == null || currentUserEmail.isEmpty()) {
-            // Nếu không có email trong SharedPreferences, thử lấy từ Firebase Auth
             FirebaseUser firebaseUser = mAuth.getCurrentUser();
             if (firebaseUser != null && firebaseUser.getEmail() != null) {
                 currentUserEmail = firebaseUser.getEmail();
-                // Lưu vào SharedPreferences cho lần sau
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString("user_email", currentUserEmail);
                 editor.apply();
@@ -75,16 +72,15 @@ public class AccountDetailsActivity extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
-                return; // Kết thúc hàm nếu không có người dùng
+                return;
             }
         }
 
         loadUserDetails(currentUserEmail);
 
-        // Đặt listener cho nút "Đăng xuất"
+
         btnLogout.setOnClickListener(v -> {
             mAuth.signOut();
-            // Xóa thông tin đăng nhập đã lưu
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.remove("user_email");
             editor.remove("user_username");
@@ -97,21 +93,16 @@ public class AccountDetailsActivity extends AppCompatActivity {
             Toast.makeText(AccountDetailsActivity.this, "Đã đăng xuất", Toast.LENGTH_SHORT).show();
         });
 
-        // Đặt listener cho nút quay lại
         backArrow.setOnClickListener(v -> onBackPressed());
 
-        // Đặt listener cho mục "Vé của tôi"
         layoutMyTicket.setOnClickListener(v -> {
             Intent intent = new Intent(AccountDetailsActivity.this, UserTicketsActivity.class);
             startActivity(intent);
         });
 
-        // Đặt listener cho mục "Đổi mật khẩu"
         layoutChangePassword.setOnClickListener(v -> {
-            // Điều hướng đến ResetPasswordActivity (hoặc một Activity đổi mật khẩu khác)
-            // Cần truyền thông tin cần thiết nếu ResetPasswordActivity yêu cầu (ví dụ: email/phone)
             Intent intent = new Intent(AccountDetailsActivity.this, ForgotPasswordActivity.class); // Giả sử dùng ForgotPasswordActivity để reset mật khẩu
-            intent.putExtra("userEmailForReset", currentUserEmail); // Truyền email
+            intent.putExtra("userEmailForReset", currentUserEmail);
             startActivity(intent);
         });
     }
@@ -129,12 +120,6 @@ public class AccountDetailsActivity extends AppCompatActivity {
                         tvUsernameDisplay.setText(user.getUsername());
                         tvEmailDisplay.setText(user.getEmail());
                         tvPhoneDisplay.setText(user.getPhone());
-                        // Vai trò không hiển thị trên giao diện mới, nhưng bạn có thể giữ nó ở đây nếu cần cho logic khác.
-                        // tvRole.setText("Vai trò: " + user.getRole());
-
-                        // Tải ảnh đại diện nếu có
-                        // Hiện tại đang dùng drawable/user, nếu có URL ảnh trong Firebase có thể tải bằng Glide
-                        // Ví dụ: Glide.with(AccountDetailsActivity.this).load(user.getProfileImageUrl()).into(ivProfileAvatar);
                         if ("admin".equals(user.getRole())) {
                             ivProfileAvatar.setImageResource(R.drawable.admin);
                         } else {

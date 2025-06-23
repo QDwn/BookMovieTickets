@@ -52,8 +52,8 @@ public class FavoriteMoviesActivity extends AppCompatActivity {
         if (currentUser != null) {
             String userId = currentUser.getUid();
 
-            favoriteMoviesRef = FirebaseDatabase.getInstance().getReference("users")
-                    .child(userId).child("favoriteMovies");
+            favoriteMoviesRef = FirebaseDatabase.getInstance().getReference("favorite_movies")
+                    .child(userId);
             loadFavoriteMovies();
         } else {
             Toast.makeText(this, "Bạn cần đăng nhập để xem phim yêu thích.", Toast.LENGTH_SHORT).show();

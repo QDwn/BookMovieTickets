@@ -75,9 +75,9 @@ public class ChitietMovie_Activity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             String userId = currentUser.getUid();
-            // Đường dẫn trong Firebase: users/{userId}/favoriteMovies/{movieId}
-            favoriteMoviesRef = FirebaseDatabase.getInstance().getReference("users")
-                    .child(userId).child("favoriteMovies").child(currentMovieId);
+
+            favoriteMoviesRef = FirebaseDatabase.getInstance().getReference("favorite_movies")
+                    .child(userId).child(currentMovieId);
             checkFavoriteStatus(); // Kiểm tra trạng thái yêu thích khi activity được tạo
         } else {
             // Nếu chưa đăng nhập, ẩn nút yêu thích (hoặc vô hiệu hóa, hiển thị thông báo)

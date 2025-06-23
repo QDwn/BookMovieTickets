@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.text.method.HideReturnsTransformationMethod; // Thêm import này
-import android.text.method.PasswordTransformationMethod; // Thêm import này
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -18,7 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-// Imports cho Google Sign-In
+
 import com.example.movieee.Admin.AdminActivity;
 import com.example.movieee.Model.HelperClass;
 import com.example.movieee.Home.MainActivity2;
@@ -44,14 +44,14 @@ import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final int RC_SIGN_IN = 9001; // Request code cho Google Sign-In
+    private static final int RC_SIGN_IN = 9001;
 
     EditText loginEmail, loginPassWord;
     Button loginButton;
     TextView signupRedirectText, forgotPasswordText;
     ImageView imageViewGoogle, imageViewFacebook, imageViewInstagram;
     CheckBox rememberMeCheckbox;
-    ImageView eyeIconLogin; // Khai báo ImageView cho icon con mắt
+    ImageView eyeIconLogin;
 
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
@@ -75,10 +75,10 @@ public class LoginActivity extends AppCompatActivity {
         signupRedirectText = findViewById(R.id.textsignup);
         forgotPasswordText = findViewById(R.id.textForgotPassword);
         imageViewGoogle = findViewById(R.id.imageViewGoogle);
-        imageViewFacebook = findViewById(R.id.imageViewFacebook); // Ánh xạ ID
-        imageViewInstagram = findViewById(R.id.imageViewInstagram); // Ánh xạ ID
-        rememberMeCheckbox = findViewById(R.id.checkBox2); // Ánh xạ CheckBox
-        eyeIconLogin = findViewById(R.id.eye_icon_login); // Ánh xạ ImageView cho icon con mắt
+        imageViewFacebook = findViewById(R.id.imageViewFacebook);
+        imageViewInstagram = findViewById(R.id.imageViewInstagram);
+        rememberMeCheckbox = findViewById(R.id.checkBox2);
+        eyeIconLogin = findViewById(R.id.eye_icon_login);
 
         // Cấu hình Google Sign-In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -90,23 +90,23 @@ public class LoginActivity extends AppCompatActivity {
         // Tải thông tin đăng nhập đã lưu (nếu có)
         loadSavedLoginDetails();
 
-        // Xử lý hiển thị/ẩn mật khẩu
-        final boolean[] isPasswordVisible = {false}; // Biến trạng thái mật khẩu
+
+        final boolean[] isPasswordVisible = {false};
 
         eyeIconLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isPasswordVisible[0]) {
-                    // Ẩn mật khẩu
+                    // Ẩn
                     loginPassWord.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                    eyeIconLogin.setImageResource(R.drawable.ic_eye_off); // Cần drawable ic_eye_off
+                    eyeIconLogin.setImageResource(R.drawable.ic_eye_off);
                 } else {
-                    // Hiện mật khẩu
+                    // Hiện
                     loginPassWord.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                    eyeIconLogin.setImageResource(R.drawable.ic_eye); // Cần drawable ic_eye
+                    eyeIconLogin.setImageResource(R.drawable.ic_eye);
                 }
                 isPasswordVisible[0] = !isPasswordVisible[0];
-                loginPassWord.setSelection(loginPassWord.length()); // Giữ con trỏ ở cuối
+                loginPassWord.setSelection(loginPassWord.length());
             }
         });
 
@@ -116,7 +116,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!validateUsername() || !validatePassWord()) {
-                    // Không làm gì cả nếu dữ liệu không hợp lệ
                 } else {
                     checkUser();
                 }
@@ -141,7 +140,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // Listener cho nút Đăng nhập bằng Google
+
         imageViewGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,7 +148,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // Listener cho nút Đăng nhập bằng Facebook (chỉ hiển thị Toast)
         imageViewFacebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,7 +155,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // Listener cho nút Đăng nhập bằng Instagram (chỉ hiển thị Toast)
         imageViewInstagram.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,28 +163,26 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    // Phương thức xử lý kết quả từ Google Sign-In
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 Log.d("LoginActivity", "firebaseAuthWithGoogle:" + account.getId());
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
                 Log.w("LoginActivity", "Google sign in failed", e);
                 Toast.makeText(LoginActivity.this, "Google Sign In Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    // --- Google Sign-In Logic ---
+
     private void signInWithGoogle() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -204,7 +199,6 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             if (user != null && user.getEmail() != null) {
                                 String username = user.getDisplayName() != null ? user.getDisplayName() : user.getEmail();
-                                // THÊM DÒNG LOG NÀY
                                 Log.d("LoginActivityDebug", "Saving to SharedPreferences (Google): Email = " + user.getEmail() + ", Username = " + username);
                                 saveUserInfoToSharedPreferences(user.getEmail(), username);
                             }
@@ -280,17 +274,16 @@ public class LoginActivity extends AppCompatActivity {
             editor.remove(PREF_PASSWORD);
             editor.putBoolean(PREF_REMEMBER_ME, false); // Vẫn lưu trạng thái checkbox
         }
-        editor.apply(); // Lưu thay đổi bất đồng bộ
+        editor.apply();
     }
 
-    // Phương thức checkUser đã được sửa đổi
+    // Phương thức checkUser
     public void checkUser() {
         String userEmail = loginEmail.getText().toString().trim();
         String userPassword = loginPassWord.getText().toString().trim();
-        boolean rememberMe = rememberMeCheckbox.isChecked(); // Lấy trạng thái checkbox
+        boolean rememberMe = rememberMeCheckbox.isChecked();
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
-        // Truy vấn dựa trên trường 'email' bên trong các node con
         Query checkUserDatabase = reference.orderByChild("email").equalTo(userEmail);
 
         checkUserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -309,15 +302,8 @@ public class LoginActivity extends AppCompatActivity {
                                         .addOnCompleteListener(LoginActivity.this, task -> {
                                             if (task.isSuccessful()) {
                                                 saveLoginDetails(userEmail, userPassword, rememberMe);
-                                                // Gọi hàm lưu thông tin người dùng vào SharedPreferences tại đây
-                                                // Lấy username từ HelperClass hoặc sử dụng email
-                                                // THÊM DÒNG LOG NÀY
-                                                Log.d("LoginActivityDebug", "Saving to SharedPreferences (Traditional): Email = " + user.getEmail() + ", Username = " + user.getUsername());
                                                 saveUserInfoToSharedPreferences(user.getEmail(), user.getUsername());
-
-
                                                 String role = user.getRole();
-
                                                 if (role != null && role.equals("admin")) {
                                                     Intent intent = new Intent(LoginActivity.this, AdminActivity.class);
                                                     startActivity(intent);
@@ -327,7 +313,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 }
                                                 finish();
                                             } else {
-                                                Toast.makeText(LoginActivity.this, "Đăng nhập Firebase Auth thất bại: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(LoginActivity.this, "Đăng nhập  thất bại: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                 return;
