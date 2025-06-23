@@ -69,12 +69,12 @@ public class DatVe_Activity extends AppCompatActivity {
     }
 
     private void loadMovieInfo() {
-        DatabaseReference movieRef = FirebaseDatabase.getInstance().getReference("danh_sach_phim").child(movieId);
+        DatabaseReference movieRef = FirebaseDatabase.getInstance().getReference("chi_tiet_phim").child(movieId);
         movieRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String title = snapshot.child("ten_phim").getValue(String.class);
-                String imageUrl = snapshot.child("poster").getValue(String.class);
+                String imageUrl = snapshot.child("imageUrl").getValue(String.class);
                 txtTitle.setText(title);
                 Glide.with(DatVe_Activity.this).load(imageUrl).into(posterImage);
                 movieTitle = title; // Lưu tên phim vào biến movieTitle

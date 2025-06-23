@@ -381,7 +381,6 @@ public class MainActivity2 extends AppCompatActivity {
         textView.setText(message);
         textView.setTextSize(16);
         textView.setPadding(8, 8, 8, 8);
-        textView.setTextColor(getResources().getColor(R.color.black));
         notificationContainer.addView(textView);
 
         }
